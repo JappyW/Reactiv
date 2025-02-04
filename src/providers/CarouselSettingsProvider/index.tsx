@@ -6,7 +6,7 @@ import {
 } from "@/providers/CarouselSettingsProvider/reducer";
 import {
   CarouselActions,
-  CarouselAlignOptions,
+  CarouselAlignmentOptions,
   CarouselImage,
   CarouselMode,
   CarouselOrientation,
@@ -67,10 +67,10 @@ export const CarouselSettingsProvider: React.FC<{ children: ReactNode }> = ({ ch
     toast(`Mode is set to ${mode}`);
   }, []);
 
-  const setAlignment = useCallback((align: CarouselAlignOptions) => {
-    dispatch({ type: CarouselReducerActionEnum.SET_ALIGNMENT, payload: { align } });
+  const setAlignment = useCallback((alignment: CarouselAlignmentOptions) => {
+    dispatch({ type: CarouselReducerActionEnum.SET_ALIGNMENT, payload: { alignment } });
 
-    toast(`Alignment is set to ${align}`);
+    toast(`Alignment is set to ${alignment}`);
   }, []);
 
   const setLoop = useCallback((loop: boolean) => {

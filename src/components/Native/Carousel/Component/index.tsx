@@ -1,3 +1,4 @@
+import { AUTOPLAY_DELAY } from "@/constants";
 import { useCarouselSettings } from "@/providers/CarouselSettingsProvider";
 import { CarouselMode } from "@/types";
 import {
@@ -13,24 +14,39 @@ import {
 } from "@components/ShadCN";
 
 import Autoplay from "embla-carousel-autoplay";
+import { useMemo } from "react";
 
 const calculateWithAndHeightClass = (mode: CarouselMode) => {
   switch (mode) {
     case "landscape":
-      return "w-[400px] h-56";
+      return "w-[450px] h-64";
     case "portrait":
-      return "w-56 h-[400px]";
+      return "w-64 h-[450px]";
     case "square":
-      return "w-56 h-56";
+      return "w-64 h-64";
     default:
-      return "w-56 h-56";
+      return "w-64 h-64";
   }
 };
 
 export const Carousel = () => {
   const {
-    state: { images, mode, orientation, loop, align, autoplay },
+    state: { images, mode, orientation, loop, alignment, autoplay },
   } = useCarouselSettings();
+
+  const plugins = useMemo(() => {
+    let addedPlugins = [];
+
+    if (autoplay) {
+      addedPlugins.push(
+        Autoplay({
+          delay: AUTOPLAY_DELAY,
+        })
+      );
+    }
+
+    return addedPlugins;
+  }, [autoplay]);
 
   return (
     <div className="max-w-[450px] w-full flex justify-center">
@@ -41,23 +57,15 @@ export const Carousel = () => {
 
         <CardContent>
           <CarouselComponent
-            plugins={
-              autoplay
-                ? [
-                    Autoplay({
-                      delay: 2000,
-                    }),
-                  ]
-                : []
-            }
+            plugins={plugins}
             className="w-full max-w-xs"
             orientation={orientation}
             opts={{
-              align,
+              align: alignment,
               loop,
             }}
           >
-            <CarouselContent className={mode === "portrait" ? "h-[400px]" : "h-56"}>
+            <CarouselContent className={mode === "portrait" ? "h-[450px]" : "h-64"}>
               {images.map((image) => (
                 <CarouselItem key={image.id} className="flex justify-center">
                   <img

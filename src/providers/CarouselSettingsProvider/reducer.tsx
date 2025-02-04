@@ -4,7 +4,7 @@ import {
   CarouselReducerActionEnum,
 } from "@/constants/enums";
 import {
-  CarouselAlignOptions,
+  CarouselAlignmentOptions,
   CarouselImage,
   CarouselMode,
   CarouselOrientation,
@@ -22,7 +22,7 @@ export type CarouselReducerActionTypes =
   | { type: CarouselReducerActionEnum.SET_MODE; payload: { mode: CarouselMode } }
   | { type: CarouselReducerActionEnum.SET_LOOP; payload: { loop: boolean } }
   | { type: CarouselReducerActionEnum.SET_AUTOPLAY; payload: { autoplay: boolean } }
-  | { type: CarouselReducerActionEnum.SET_ALIGNMENT; payload: { align: CarouselAlignOptions } };
+  | { type: CarouselReducerActionEnum.SET_ALIGNMENT; payload: { alignment: CarouselAlignmentOptions } };
 
 export const carouselReducerInitialState: CarouselProps = {
   images: [
@@ -51,7 +51,7 @@ export const carouselReducerInitialState: CarouselProps = {
   mode: CarouselModeEnum.LANDSCAPE,
   loop: true,
   autoplay: true,
-  align: "start",
+  alignment: "start",
 };
 
 export const carouselSettingsReducer = (
@@ -74,7 +74,7 @@ export const carouselSettingsReducer = (
     case CarouselReducerActionEnum.SET_ALIGNMENT:
       return {
         ...state,
-        align: action.payload.align,
+        alignment: action.payload.alignment,
       };
 
     case CarouselReducerActionEnum.SET_AUTOPLAY:

@@ -43,6 +43,8 @@ import {
     DialogTrigger,
 } from "./dialog";
 
+import { Switch } from "./switch";
+
 export {
     Button,
     Card,
@@ -77,6 +79,7 @@ export {
     SelectItem,
     SelectLabel,
     SelectTrigger,
-    SelectValue
+    SelectValue,
+    Switch
 };
 

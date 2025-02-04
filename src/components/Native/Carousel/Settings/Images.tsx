@@ -55,8 +55,8 @@ export const CarouselImagesSettings = () => {
       </CardHeader>
       <CardContent>
         <ScrollArea className="w-full whitespace-nowrap rounded-md ">
-          <div className="flex w-max space-x-4 p-4">
-            {images.map((image) => (
+          <div className="flex w-max space-x-4 p-4 mb-4">
+            {images.map((image, index) => (
               <div
                 key={image.id}
                 className="flex flex-col items-center relative w-[200px] h-[200px] overflow-x-hidden"
@@ -72,17 +72,17 @@ export const CarouselImagesSettings = () => {
                   type="button"
                   variant="destructive"
                   size="icon"
-                  className="absolute right-0 top-0 h-7 w-7 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                  className="absolute right-0 top-0 h-7 w-7 "
                   onClick={() => removeImage(image.id)}
                 >
                   <XIcon className="h-4 w-4" />
                 </Button>
+                <span className="absolute top-0 left-1/2 -translate-x-1/2">Image: {index + 1}</span>
                 <Button
                   title="Edit image"
                   type="button"
-                  variant="ghost"
                   size="icon"
-                  className="absolute left-0 top-0 h-7 w-7 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                  className="absolute left-0 top-0 h-7 w-7 "
                   onClick={() => {
                     setExistingImage(image);
                     setEditModalOpen(true);
@@ -93,7 +93,7 @@ export const CarouselImagesSettings = () => {
               </div>
             ))}
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar orientation="horizontal" className="h-6"/>
         </ScrollArea>
         {existingImage ? (
           <Dialog open={editModalOpen} onOpenChange={(v) => setEditModalOpen(v)}>

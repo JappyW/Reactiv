@@ -1,6 +1,15 @@
-import { CarouselModeEnum, CarouselOrientationEnum } from "@/constants/enums";
+import {
+    CarouselAlignmentEnum,
+    CarouselModeEnum,
+    CarouselOrientationEnum,
+} from "@/constants/enums";
 import { useCarouselSettings } from "@/providers/CarouselSettingsProvider";
-import { CarouselImage, CarouselMode, CarouselOrientation, ClassNameHelper } from "@/types";
+import {
+    CarouselAlignmentOptions,
+    CarouselImage,
+    CarouselMode,
+    CarouselOrientation,
+} from "@/types";
 import {
     Button,
     Card,
@@ -15,6 +24,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
+    Switch,
 } from "@components/ShadCN";
 
 import { v4 as uuidv4 } from "uuid";
@@ -23,11 +33,11 @@ import { capitalize, isImgUrl } from "@/lib/utils";
 import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
+export const CarouselFieldsSettings = () => {
   const [newImage, setNewImage] = useState<CarouselImage | undefined>();
 
   const {
-    state: { images, mode, orientation },
+    state: { mode, orientation, alignment, loop, autoplay },
     actions: { setMode, setOrientation, setAlignment, setLoop, setAutoplay, addImage },
   } = useCarouselSettings();
 
@@ -36,6 +46,10 @@ export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
     () => Object.values(CarouselOrientationEnum),
     [CarouselOrientationEnum]
   );
+  const alignmentValues = useMemo(
+    () => Object.values(CarouselAlignmentEnum),
+    [CarouselAlignmentEnum]
+  );
 
   const handleChangeMode = useCallback((value: CarouselMode) => {
     setMode(value);
@@ -43,6 +57,18 @@ export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
 
   const handleChangeOrientation = useCallback((value: CarouselOrientation) => {
     setOrientation(value);
+  }, []);
+
+  const handleChangeAlignment = useCallback((value: CarouselAlignmentOptions) => {
+    setAlignment(value);
+  }, []);
+
+  const handleChangeAutoplay = useCallback((value: boolean) => {
+    setAutoplay(value);
+  }, []);
+
+  const handleChangeLoop = useCallback((value: boolean) => {
+    setLoop(value);
   }, []);
 
   const handleChangeNewImageSrc = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +97,7 @@ export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
           <div className="grid w-full items-center gap-2">
             <div className="flex flex-col justify-center w-full gap-2">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Image</Label>
+                <Label htmlFor="image">Image</Label>
                 <Input
                   className="w-full"
                   placeholder="Image source"
@@ -86,7 +112,6 @@ export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
                   title="Clear"
                   type="button"
                   variant="destructive"
-                  className=" text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                   onClick={() => setNewImage(undefined)}
                 >
                   Clear
@@ -95,7 +120,6 @@ export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
                   title="Save"
                   type="button"
                   variant="secondary"
-                  className=" text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                   onClick={handleSubmitNewImage}
                 >
                   Save
@@ -104,7 +128,7 @@ export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
             </div>
 
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Mode</Label>
+              <Label htmlFor="mode">Mode</Label>
               <Select value={mode} onValueChange={handleChangeMode}>
                 <SelectTrigger id="mode">
                   <SelectValue placeholder="Select mode" />
@@ -120,7 +144,7 @@ export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
             </div>
 
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Orientation</Label>
+              <Label htmlFor="orientation">Orientation</Label>
               <Select value={orientation} onValueChange={handleChangeOrientation}>
                 <SelectTrigger id="orientation">
                   <SelectValue placeholder="Select orientation" />
@@ -133,6 +157,32 @@ export const CarouselFieldsSettings = ({ className }: ClassNameHelper) => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="orientation">Alignment</Label>
+              <Select value={alignment} onValueChange={handleChangeAlignment}>
+                <SelectTrigger id="orientation">
+                  <SelectValue placeholder="Select orientation" />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  {alignmentValues.map((alignment) => (
+                    <SelectItem key={alignment} value={alignment}>
+                      {capitalize(alignment)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex space-x-1.5 items-center">
+              <Switch id="autoplay" checked={autoplay} onCheckedChange={handleChangeAutoplay} />
+              <Label htmlFor="autoplay">Autoplay</Label>
+            </div>
+
+            <div className="flex space-x-1.5 items-center">
+              <Switch id="loop" checked={loop} onCheckedChange={handleChangeLoop} />
+              <Label htmlFor="loop">Loop</Label>
             </div>
           </div>
         </CardContent>
