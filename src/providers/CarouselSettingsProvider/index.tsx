@@ -6,6 +6,7 @@ import {
 } from "@/providers/CarouselSettingsProvider/reducer";
 import {
   CarouselActions,
+  CarouselAlignOptions,
   CarouselImage,
   CarouselMode,
   CarouselOrientation,
@@ -27,6 +28,9 @@ const CarouselSettingsContext = createContext<CarouselSettingsContextType>({
     removeImage: NO_CALLBACK,
     setMode: NO_CALLBACK,
     setOrientation: NO_CALLBACK,
+    setAlignment: NO_CALLBACK,
+    setLoop: NO_CALLBACK,
+    setAutoplay: NO_CALLBACK,
   },
 });
 
@@ -40,7 +44,7 @@ export const CarouselSettingsProvider: React.FC<{ children: ReactNode }> = ({ ch
   }, []);
 
   const editImage = useCallback((image: CarouselImage) => {
-    dispatch({ type: CarouselReducerActionEnum.ADD_IMAGE, payload: { image } });
+    dispatch({ type: CarouselReducerActionEnum.EDIT_IMAGE, payload: { image } });
 
     toast("Edited the image");
   }, []);
@@ -63,9 +67,39 @@ export const CarouselSettingsProvider: React.FC<{ children: ReactNode }> = ({ ch
     toast(`Mode is set to ${mode}`);
   }, []);
 
+  const setAlignment = useCallback((align: CarouselAlignOptions) => {
+    dispatch({ type: CarouselReducerActionEnum.SET_ALIGNMENT, payload: { align } });
+
+    toast(`Alignment is set to ${align}`);
+  }, []);
+
+  const setLoop = useCallback((loop: boolean) => {
+    dispatch({ type: CarouselReducerActionEnum.SET_LOOP, payload: { loop } });
+
+    toast(`Loop is set ${loop ? "enabled" : "disabled"}`);
+  }, []);
+
+  const setAutoplay = useCallback((autoplay: boolean) => {
+    dispatch({ type: CarouselReducerActionEnum.SET_AUTOPLAY, payload: { autoplay } });
+
+    toast(`Autoplay is set ${autoplay ? "enabled" : "disabled"}`);
+  }, []);
+
   return (
     <CarouselSettingsContext.Provider
-      value={{ state, actions: { setMode, addImage, editImage, setOrientation, removeImage } }}
+      value={{
+        state,
+        actions: {
+          setMode,
+          addImage,
+          editImage,
+          setOrientation,
+          removeImage,
+          setAlignment,
+          setLoop,
+          setAutoplay,
+        },
+      }}
     >
       {children}
     </CarouselSettingsContext.Provider>

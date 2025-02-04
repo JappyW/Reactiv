@@ -12,6 +12,8 @@ import {
   CarouselPrevious,
 } from "@components/ShadCN";
 
+import Autoplay from "embla-carousel-autoplay";
+
 const calculateWithAndHeightClass = (mode: CarouselMode) => {
   switch (mode) {
     case "landscape":
@@ -27,7 +29,7 @@ const calculateWithAndHeightClass = (mode: CarouselMode) => {
 
 export const Carousel = () => {
   const {
-    state: { images, mode, orientation },
+    state: { images, mode, orientation, loop, align, autoplay },
   } = useCarouselSettings();
 
   return (
@@ -39,11 +41,20 @@ export const Carousel = () => {
 
         <CardContent>
           <CarouselComponent
+            plugins={
+              autoplay
+                ? [
+                    Autoplay({
+                      delay: 2000,
+                    }),
+                  ]
+                : []
+            }
             className="w-full max-w-xs"
             orientation={orientation}
             opts={{
-              align: "start",
-              loop: false,
+              align,
+              loop,
             }}
           >
             <CarouselContent className={mode === "portrait" ? "h-[400px]" : "h-56"}>

@@ -3,16 +3,26 @@ import {
   CarouselOrientationEnum,
   CarouselReducerActionEnum,
 } from "@/constants/enums";
-import { CarouselImage, CarouselMode, CarouselOrientation, CarouselProps } from "@/types";
+import {
+  CarouselAlignOptions,
+  CarouselImage,
+  CarouselMode,
+  CarouselOrientation,
+  CarouselProps,
+} from "@/types";
 
 export type CarouselReducerActionTypes =
+  | { type: CarouselReducerActionEnum.ADD_IMAGE; payload: { image: CarouselImage } }
+  | { type: CarouselReducerActionEnum.EDIT_IMAGE; payload: { image: CarouselImage } }
+  | { type: CarouselReducerActionEnum.REMOVE_IMAGE; payload: { id: string } }
   | {
       type: CarouselReducerActionEnum.SET_ORIENTATION;
       payload: { orientation: CarouselOrientation };
     }
   | { type: CarouselReducerActionEnum.SET_MODE; payload: { mode: CarouselMode } }
-  | { type: CarouselReducerActionEnum.ADD_IMAGE; payload: { image: CarouselImage } }
-  | { type: CarouselReducerActionEnum.REMOVE_IMAGE; payload: { id: string } };
+  | { type: CarouselReducerActionEnum.SET_LOOP; payload: { loop: boolean } }
+  | { type: CarouselReducerActionEnum.SET_AUTOPLAY; payload: { autoplay: boolean } }
+  | { type: CarouselReducerActionEnum.SET_ALIGNMENT; payload: { align: CarouselAlignOptions } };
 
 export const carouselReducerInitialState: CarouselProps = {
   images: [
@@ -39,6 +49,9 @@ export const carouselReducerInitialState: CarouselProps = {
   ],
   orientation: CarouselOrientationEnum.HORIZONTAL,
   mode: CarouselModeEnum.LANDSCAPE,
+  loop: true,
+  autoplay: true,
+  align: "start",
 };
 
 export const carouselSettingsReducer = (
@@ -46,25 +59,56 @@ export const carouselSettingsReducer = (
   action: CarouselReducerActionTypes
 ): CarouselProps => {
   switch (action.type) {
-    case "SET_ORIENTATION":
+    case CarouselReducerActionEnum.SET_ORIENTATION:
       return {
         ...state,
         orientation: action.payload.orientation,
       };
 
-    case "SET_MODE":
+    case CarouselReducerActionEnum.SET_MODE:
       return {
         ...state,
         mode: action.payload.mode,
       };
 
-    case "ADD_IMAGE":
+    case CarouselReducerActionEnum.SET_ALIGNMENT:
+      return {
+        ...state,
+        align: action.payload.align,
+      };
+
+    case CarouselReducerActionEnum.SET_AUTOPLAY:
+      return {
+        ...state,
+        autoplay: action.payload.autoplay,
+      };
+    case CarouselReducerActionEnum.SET_LOOP:
+      return {
+        ...state,
+        loop: action.payload.loop,
+      };
+
+    case CarouselReducerActionEnum.ADD_IMAGE:
       return {
         ...state,
         images: [...state.images, action.payload.image],
       };
 
-    case "REMOVE_IMAGE":
+    case CarouselReducerActionEnum.EDIT_IMAGE:
+      const newImages = [...state.images];
+      const editedImageIndex = newImages.findIndex((image) => image.id === action.payload.image.id);
+
+      if (editedImageIndex !== -1) {
+        newImages[editedImageIndex] = action.payload.image;
+        return {
+          ...state,
+          images: newImages,
+        };
+      }
+
+      return state;
+
+    case CarouselReducerActionEnum.REMOVE_IMAGE:
       return {
         ...state,
         images: state.images.filter((image) => image.id !== action.payload.id),
