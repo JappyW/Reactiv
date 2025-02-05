@@ -14,8 +14,14 @@ import { ColorPicker, IColor, useColor } from "react-color-palette";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { MAX_PADDING } from "@/constants";
+import {
+    MAX_BUTTON_BORDER_RADIUS,
+    MAX_BUTTON_PADDING,
+    MIN_BUTTON_BORDER_RADIUS,
+    MIN_BUTTON_PADDING,
+} from "@/constants";
 import { useButtonSettings } from "@/providers/ButtonSettingsProvider";
+import { ButtonProps } from "@/types";
 import { toast } from "sonner";
 
 const buttonFormSchema = z.object({
@@ -23,15 +29,23 @@ const buttonFormSchema = z.object({
   link: z.string().url("Invalid URL").optional(),
   bgColor: z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid color code"),
   labelColor: z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid color code"),
-  borderRadius: z.coerce.number().gte(0, "Must be 0 and above").lte(100, "Must be 100 and below"),
-  padding: z.coerce.number().gte(0, "Must be 0 and above").lte(MAX_PADDING, "Must be 40 and below"),
+  borderRadius: z.coerce
+    .number()
+    .gte(MIN_BUTTON_BORDER_RADIUS, "Must be 0 and above")
+    .lte(MAX_BUTTON_BORDER_RADIUS, "Must be 100 and below"),
+  padding: z.coerce
+    .number()
+    .gte(MIN_BUTTON_PADDING, "Must be 0 and above")
+    .lte(MAX_BUTTON_PADDING, "Must be 40 and below"),
 });
 
 export const ButtonSettings = () => {
   const {
-    state: { bgColor, label, labelColor, link, borderRadius, padding },
+    state: buttonState,
     actions: { setBGColor, setLabel, setLabelColor, setLink, setBorderRadius, setPadding },
   } = useButtonSettings();
+
+  const { bgColor, label, padding, link, labelColor, borderRadius } = buttonState;
 
   const [bgColorFromPicker, setBGColorFromPicker] = useColor(bgColor);
   const [labelColorFromPicker, setLabelColorFromPicker] = useColor(labelColor);
@@ -48,6 +62,10 @@ export const ButtonSettings = () => {
     },
   });
 
+  const resetFormFields = () => {
+    form.reset();
+  };
+
   const handleChangeLabelColor = (newColor: IColor, onChange: (...event: any[]) => void) => {
     setLabelColorFromPicker(newColor);
     onChange(newColor.hex);
@@ -59,6 +77,10 @@ export const ButtonSettings = () => {
   };
 
   const onSubmit = (values: z.infer<typeof buttonFormSchema>) => {
+    let showToast = Object.keys(buttonState).some(
+      (key) => values[key as keyof ButtonProps] !== buttonState[key as keyof ButtonProps]
+    );
+
     if (values.link && values.link !== link) {
       setLink(values.link);
     }
@@ -84,18 +106,9 @@ export const ButtonSettings = () => {
     }
 
     //form.formState.isDirty gets set to true when fields werent touched
-    if (
-      values.link !== link ||
-      values.label !== label ||
-      values.labelColor !== labelColor ||
-      values.borderRadius !== borderRadius ||
-      values.padding !== padding ||
-      values.bgColor !== bgColor
-    ) {
+    if (showToast) {
       toast("Settings updated");
     }
-
-    form.reset();
   };
 
   return (
@@ -236,9 +249,14 @@ export const ButtonSettings = () => {
                   />
                 </div>
               </div>
-              <Button type="submit" className="ml-auto block">
-                Submit
-              </Button>
+              <div className="flex justify-end gap-4">
+                <Button type="button" variant="destructive" onClick={resetFormFields}>
+                  Reset
+                </Button>
+                <Button variant="secondary" type="submit">
+                  Save
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>

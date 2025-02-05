@@ -1,7 +1,7 @@
 import { Button } from "@components/ShadCN";
 import { useNavigate } from "react-router";
 
-export const NotFoundPage = () => {
+const NotFoundPage = () => {
   const navigation = useNavigate();
 
   const handleRedirectToPreviousPage = () => {
@@ -17,3 +17,5 @@ export const NotFoundPage = () => {
     </div>
   );
 };
+
+export default NotFoundPage;

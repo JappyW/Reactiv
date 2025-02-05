@@ -1,5 +1,5 @@
-import { ReactivLogoSVG } from "@components/Native/SVGIcons";
-import { ThemeSwitch } from "@components/Native/ThemeSwitch";
+import { ReactivLogoSVG } from "@/icons/ReactivLogo";
+import { ThemeSwitch } from "@components/ThemeSwitch";
 
 import { Link } from "react-router";
 

@@ -35,7 +35,7 @@ export const ImageCard = ({
       >
         <div className="">{title}</div>
 
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           <Button title="Remove image" type="button" variant="destructive" onClick={removeImage}>
             Remove
           </Button>

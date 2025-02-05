@@ -57,8 +57,8 @@ export const carouselReducerInitialState: CarouselProps = {
   ],
   orientation: CarouselOrientationEnum.HORIZONTAL,
   mode: CarouselModeEnum.LANDSCAPE,
-  loop: true,
-  autoplay: true,
+  loop: false,
+  autoplay: false,
   alignment: "start",
   itemsPerPage: 1,
 };

@@ -1,3 +1,4 @@
+import { CarouselOrientationEnum } from "@/constants/enums";
 import { CarouselMode, CarouselProps } from "@/types";
 import {
   Carousel as CarouselComponent,
@@ -11,13 +12,13 @@ import { CarouselPlugin } from "@components/ShadCN/carousel";
 const calculateWithAndHeightClass = (mode: CarouselMode) => {
   switch (mode) {
     case "landscape":
-      return "w-96 h-56";
+      return "w-72 h-36";
     case "portrait":
-      return "w-56 h-96";
+      return "w-72 h-96";
     case "square":
-      return "w-56 h-56";
+      return "w-72 h-72";
     default:
-      return "w-56 h-56";
+      return "w-72 h-72";
   }
 };
 
@@ -33,14 +34,20 @@ export const Carousel = ({
   return (
     <CarouselComponent
       plugins={plugins}
-      className="w-full max-w-xs"
+      className="w-full"
       orientation={orientation}
       opts={{
         align: alignment,
         loop,
       }}
     >
-      <CarouselContent className={mode === "portrait" ? "h-96" : "h-64"}>
+      <CarouselContent
+        className={`${
+          orientation === CarouselOrientationEnum.HORIZONTAL
+            ? "h-fit"
+            : calculateWithAndHeightClass(mode)
+        } w-fit`}
+      >
         {images.map((image) => (
           <CarouselItem key={image.id} className={`flex justify-center basis-1/${itemsPerPage}`}>
             <img
