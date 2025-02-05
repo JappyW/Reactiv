@@ -1,9 +1,11 @@
-import { DefaultLayout } from "@/layouts/Default";
+import { DefaultLayout } from "@/layouts/DefaultLayout";
+import { PagetLayout } from "@/layouts/PageLayout";
+import { NotFoundPage } from "@/pages/404";
 import { CarouselPage } from "@/pages/carousel";
+import { HomePage } from "@/pages/home";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
-import "./App.css";
 
 function App() {
   return (
@@ -11,7 +13,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<DefaultLayout />}>
-            <Route path="/carousel" element={<CarouselPage />} />
+            <Route element={<PagetLayout />}>
+              <Route path="/carousel" element={<CarouselPage />} />
+            </Route>
+            <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

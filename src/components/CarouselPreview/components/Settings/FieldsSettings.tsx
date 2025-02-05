@@ -1,30 +1,30 @@
 import {
-    CarouselAlignmentEnum,
-    CarouselModeEnum,
-    CarouselOrientationEnum,
+  CarouselAlignmentEnum,
+  CarouselModeEnum,
+  CarouselOrientationEnum,
 } from "@/constants/enums";
 import { useCarouselSettings } from "@/providers/CarouselSettingsProvider";
 import {
-    CarouselAlignmentOptions,
-    CarouselImage,
-    CarouselMode,
-    CarouselOrientation,
+  CarouselAlignmentOptions,
+  CarouselImage,
+  CarouselMode,
+  CarouselOrientation,
 } from "@/types";
 import {
-    Button,
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-    Input,
-    Label,
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-    Switch,
+  Button,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Switch,
 } from "@components/ShadCN";
 
 import { v4 as uuidv4 } from "uuid";
@@ -37,8 +37,16 @@ export const CarouselFieldsSettings = () => {
   const [newImage, setNewImage] = useState<CarouselImage | undefined>();
 
   const {
-    state: { mode, orientation, alignment, loop, autoplay },
-    actions: { setMode, setOrientation, setAlignment, setLoop, setAutoplay, addImage },
+    state: { mode, orientation, alignment, loop, autoplay, itemsPerPage },
+    actions: {
+      setMode,
+      setOrientation,
+      setAlignment,
+      setLoop,
+      setAutoplay,
+      addImage,
+      setItemsPerPage,
+    },
   } = useCarouselSettings();
 
   const modeValues = useMemo(() => Object.values(CarouselModeEnum), [CarouselModeEnum]);
@@ -70,6 +78,29 @@ export const CarouselFieldsSettings = () => {
   const handleChangeLoop = useCallback((value: boolean) => {
     setLoop(value);
   }, []);
+
+
+  //TODO transform into form to prevent from entering invalid values
+  //and changing the value immediately on error
+  const handleChangeItemsPerPage = useCallback(
+    (value: string) => {
+      let items = isNaN(parseInt(value)) ? 1 : parseInt(value);
+
+      console.log(items, itemsPerPage);
+
+      if (items === itemsPerPage) {
+        return;
+      }
+
+      if (items > 3) {
+        setItemsPerPage(3);
+        return;
+      }
+
+      setItemsPerPage(items);
+    },
+    [itemsPerPage]
+  );
 
   const handleChangeNewImageSrc = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -116,12 +147,7 @@ export const CarouselFieldsSettings = () => {
                 >
                   Clear
                 </Button>
-                <Button
-                  title="Save"
-                  type="button"
-                  variant="secondary"
-                  onClick={handleSubmitNewImage}
-                >
+                <Button title="Save" type="button" onClick={handleSubmitNewImage}>
                   Save
                 </Button>
               </div>
@@ -173,6 +199,21 @@ export const CarouselFieldsSettings = () => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="itemsPerPage">Images Per Page</Label>
+              <Input
+                className="w-full"
+                placeholder="Images per page"
+                type="number"
+                min={0}
+                max={3}
+                id="itemsPerPage"
+                name="itemsPerPage"
+                value={itemsPerPage}
+                onChange={(e) => handleChangeItemsPerPage(e.target.value)}
+              />
             </div>
 
             <div className="flex space-x-1.5 items-center">

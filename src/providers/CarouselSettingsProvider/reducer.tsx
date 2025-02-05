@@ -22,7 +22,11 @@ export type CarouselReducerActionTypes =
   | { type: CarouselReducerActionEnum.SET_MODE; payload: { mode: CarouselMode } }
   | { type: CarouselReducerActionEnum.SET_LOOP; payload: { loop: boolean } }
   | { type: CarouselReducerActionEnum.SET_AUTOPLAY; payload: { autoplay: boolean } }
-  | { type: CarouselReducerActionEnum.SET_ALIGNMENT; payload: { alignment: CarouselAlignmentOptions } };
+  | {
+      type: CarouselReducerActionEnum.SET_ALIGNMENT;
+      payload: { alignment: CarouselAlignmentOptions };
+    }
+  | { type: CarouselReducerActionEnum.SET_ITEMS_PER_PAGE; payload: { itemsPerPage: number } };
 
 export const carouselReducerInitialState: CarouselProps = {
   images: [
@@ -52,6 +56,7 @@ export const carouselReducerInitialState: CarouselProps = {
   loop: true,
   autoplay: true,
   alignment: "start",
+  itemsPerPage: 1,
 };
 
 export const carouselSettingsReducer = (
@@ -86,6 +91,11 @@ export const carouselSettingsReducer = (
       return {
         ...state,
         loop: action.payload.loop,
+      };
+    case CarouselReducerActionEnum.SET_ITEMS_PER_PAGE:
+      return {
+        ...state,
+        itemsPerPage: action.payload.itemsPerPage,
       };
 
     case CarouselReducerActionEnum.ADD_IMAGE:

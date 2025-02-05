@@ -24,4 +24,12 @@ export enum CarouselReducerActionEnum {
   SET_ALIGNMENT = "SET_ALIGNMENT",
   SET_LOOP = "SET_LOOP",
   SET_AUTOPLAY = "SET_AUTOPLAY",
+  SET_ITEMS_PER_PAGE = "SET_ITEMS_PER_PAGE",
+}
+
+export enum ButtonReducerActionEnum {
+  SET_LABEL = "SET_LABEL",
+  SET_LINK = "SET_LINK",
+  SET_LABEL_COLOR = "SET_LABEL_COLOR",
+  SET_BG_COLOR = "SET_BG_COLOR",
 }
