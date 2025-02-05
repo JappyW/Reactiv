@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
+import { ReactFCWithChildren } from "@/types";
 
-export const RightColumn: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const RightColumn: ReactFCWithChildren = ({ children }) => {
   return (
-    <div className="flex justify-center items-center gap-10 flex-col md:w-5/12 w-full">
+    <div className="flex justify-center items-center gap-10 flex-col flex-shrink-0 w-fit">
       {children}
     </div>
   );

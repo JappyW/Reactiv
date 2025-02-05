@@ -1,6 +1,7 @@
 import { DefaultLayout } from "@/layouts/DefaultLayout";
 import { PagetLayout } from "@/layouts/PageLayout";
 import { NotFoundPage } from "@/pages/404";
+import { ButtonPage } from "@/pages/button";
 import { CarouselPage } from "@/pages/carousel";
 import { HomePage } from "@/pages/home";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -15,6 +16,7 @@ function App() {
           <Route element={<DefaultLayout />}>
             <Route element={<PagetLayout />}>
               <Route path="/carousel" element={<CarouselPage />} />
+              <Route path="/button" element={<ButtonPage />} />
             </Route>
             <Route path="/" element={<HomePage />} />
             <Route path="*" element={<NotFoundPage />} />

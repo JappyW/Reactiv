@@ -1,23 +1,25 @@
 import { NO_CALLBACK } from "@/constants";
 import { CarouselReducerActionEnum } from "@/constants/enums";
+import { pluralize } from "@/lib/utils";
 import {
   carouselReducerInitialState,
   carouselSettingsReducer,
 } from "@/providers/CarouselSettingsProvider/reducer";
 import {
-  CarouselActions,
   CarouselAlignmentOptions,
   CarouselImage,
   CarouselMode,
   CarouselOrientation,
   CarouselProps,
+  CarouselSettingsActions,
+  ReactFCWithChildren,
 } from "@/types";
-import { createContext, ReactNode, useCallback, useContext, useReducer } from "react";
+import { createContext, useCallback, useContext, useReducer } from "react";
 import { toast } from "sonner";
 
 type CarouselSettingsContextType = {
   state: CarouselProps;
-  actions: CarouselActions;
+  actions: CarouselSettingsActions;
 };
 
 const CarouselSettingsContext = createContext<CarouselSettingsContextType>({
@@ -31,10 +33,11 @@ const CarouselSettingsContext = createContext<CarouselSettingsContextType>({
     setAlignment: NO_CALLBACK,
     setLoop: NO_CALLBACK,
     setAutoplay: NO_CALLBACK,
+    setItemsPerPage: NO_CALLBACK,
   },
 });
 
-export const CarouselSettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const CarouselSettingsProvider: ReactFCWithChildren = ({ children }) => {
   const [state, dispatch] = useReducer(carouselSettingsReducer, carouselReducerInitialState);
 
   const addImage = useCallback((image: CarouselImage) => {
@@ -76,13 +79,19 @@ export const CarouselSettingsProvider: React.FC<{ children: ReactNode }> = ({ ch
   const setLoop = useCallback((loop: boolean) => {
     dispatch({ type: CarouselReducerActionEnum.SET_LOOP, payload: { loop } });
 
-    toast(`Loop is set ${loop ? "enabled" : "disabled"}`);
+    toast(`Loop is set to ${loop ? "enabled" : "disabled"}`);
   }, []);
 
   const setAutoplay = useCallback((autoplay: boolean) => {
     dispatch({ type: CarouselReducerActionEnum.SET_AUTOPLAY, payload: { autoplay } });
 
-    toast(`Autoplay is set ${autoplay ? "enabled" : "disabled"}`);
+    toast(`Autoplay is set to ${autoplay ? "enabled" : "disabled"}`);
+  }, []);
+
+  const setItemsPerPage = useCallback((itemsPerPage: number) => {
+    dispatch({ type: CarouselReducerActionEnum.SET_ITEMS_PER_PAGE, payload: { itemsPerPage } });
+
+    toast(`Set ${itemsPerPage} ${pluralize("image", itemsPerPage)} to be displayed per page`);
   }, []);
 
   return (
@@ -98,6 +107,7 @@ export const CarouselSettingsProvider: React.FC<{ children: ReactNode }> = ({ ch
           setAlignment,
           setLoop,
           setAutoplay,
+          setItemsPerPage,
         },
       }}
     >

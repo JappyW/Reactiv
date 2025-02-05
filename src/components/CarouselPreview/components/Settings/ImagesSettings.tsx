@@ -11,6 +11,7 @@ import {
   CardTitle,
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -74,7 +75,7 @@ export const CarouselImagesSettings = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-4 flex-wrap max-h-52 overflow-y-auto">
+        <div className="flex gap-4 flex-wrap justify-center max-h-52 overflow-y-auto">
           {images.map((image, index) => {
             const title = `Image ${index + 1}`;
             if (mobileFriendlyImageSettings)
@@ -104,6 +105,9 @@ export const CarouselImagesSettings = () => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Edit image</DialogTitle>
+                <DialogDescription>
+                  Make changes to the image here. Click save when you're done.
+                </DialogDescription>
               </DialogHeader>
               <Input
                 placeholder="Image source"

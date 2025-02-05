@@ -1,13 +1,14 @@
 import { AUTOPLAY_DELAY } from "@/constants";
 import { Carousel } from "@/mobile/components/Carousel";
 import { useCarouselSettings } from "@/providers/CarouselSettingsProvider";
-import { Card, CardContent, CardHeader, CardTitle } from "@components/ShadCN";
+import { PhoneScreen } from "@components/PhoneScreen";
+import { Card, CardHeader, CardTitle } from "@components/ShadCN";
 import Autoplay from "embla-carousel-autoplay";
 import { useMemo } from "react";
 
 export const CarouselContainer = () => {
   const {
-    state: { images, mode, orientation, loop, alignment, autoplay },
+    state: { images, mode, orientation, loop, alignment, autoplay, itemsPerPage, ...rest },
   } = useCarouselSettings();
 
   const plugins = useMemo(() => {
@@ -27,21 +28,23 @@ export const CarouselContainer = () => {
   }, [autoplay]);
 
   return (
-    <Card className="p-10 w-full flex justify-center items-center flex-col">
+    <Card className="p-10 w-fit flex justify-center items-center flex-col">
       <CardHeader className="mb-10">
-        <CardTitle>Carousel</CardTitle>
+        <CardTitle>Carousel Preview</CardTitle>
       </CardHeader>
 
-      <CardContent>
+      <PhoneScreen>
         <Carousel
+          {...rest}
           plugins={plugins}
           images={images}
           loop={loop}
           mode={mode}
           orientation={orientation}
           alignment={alignment}
+          itemsPerPage={itemsPerPage}
         />
-      </CardContent>
+      </PhoneScreen>
     </Card>
   );
 };

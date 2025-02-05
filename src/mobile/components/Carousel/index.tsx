@@ -28,7 +28,7 @@ export const Carousel = ({
   loop,
   alignment,
   plugins,
-  itemsPerPage = 3,
+  itemsPerPage = 1,
 }: Omit<CarouselProps, "autoplay"> & { plugins: CarouselPlugin }) => {
   return (
     <CarouselComponent

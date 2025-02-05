@@ -10,9 +10,9 @@ export const NotFoundPage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <h3>Ooops...</h3>
-      <h4>The page is not found</h4>
+    <div className="flex flex-col justify-center items-center h-80 w-full gap-4">
+      <h3 className="text-4xl">Ooops...</h3>
+      <h4 className="text-3xl">The page is not found</h4>
       <Button onClick={handleRedirectToPreviousPage}>Go back</Button>
     </div>
   );

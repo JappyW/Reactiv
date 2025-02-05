@@ -6,15 +6,17 @@ import {
 
 export type ClassNameHelper = { className?: string };
 
+export type ReactFCWithChildren<T = unknown> = React.FC<T & { children: React.ReactNode }>;
+
 //Carousel Types
 export type CarouselProps = {
   images: CarouselImage[];
   orientation: CarouselOrientation;
   mode: CarouselMode;
-  loop?: boolean;
-  autoplay?: boolean;
-  alignment?: CarouselAlignmentOptions;
-  itemsPerPage?: number;
+  loop: boolean;
+  autoplay: boolean;
+  alignment: CarouselAlignmentOptions;
+  itemsPerPage: number;
 };
 
 export type CarouselAlignmentOptions = `${CarouselAlignmentEnum}`;
@@ -47,8 +49,9 @@ export type ButtonProps = {
   label: string;
   labelColor: string;
   bgColor: string;
-  link: string;
-  onClick?: () => void;
+  padding: number;
+  borderRadius: number;
+  link?: string;
 };
 
 export type ButtonSettingsActions = {
@@ -56,6 +59,8 @@ export type ButtonSettingsActions = {
   setLink: (link: string) => void;
   setLabelColor: (color: string) => void;
   setBGColor: (bgColor: string) => void;
+  setPadding: (padding: number) => void;
+  setBorderRadius: (borderRadius: number) => void;
 };
 
 export type TextAreaProps = {

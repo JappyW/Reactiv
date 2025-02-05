@@ -5,20 +5,12 @@ import {
 } from "@/constants/enums";
 import { useCarouselSettings } from "@/providers/CarouselSettingsProvider";
 import {
-  CarouselAlignmentOptions,
-  CarouselImage,
-  CarouselMode,
-  CarouselOrientation,
-} from "@/types";
-import {
   Button,
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
   Input,
-  Label,
   Select,
   SelectContent,
   SelectItem,
@@ -27,15 +19,39 @@ import {
   Switch,
 } from "@components/ShadCN";
 
-import { v4 as uuidv4 } from "uuid";
+import { IMG_REGEX, MAX_ITEMS_PER_PAGE, MIN_ITEMS_PER_PAGE } from "@/constants";
+import { capitalize } from "@/lib/utils";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@components/ShadCN/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { capitalize, isImgUrl } from "@/lib/utils";
-import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { v4 as uuid } from "uuid";
+
+const carouselFormSchema = z.object({
+  image: z.string().regex(IMG_REGEX, "Invalid image url").optional().or(z.literal("")),
+  itemsPerPage: z.coerce
+    .number()
+    .gte(MIN_ITEMS_PER_PAGE, `Must be ${MIN_ITEMS_PER_PAGE} and above`)
+    .lte(MAX_ITEMS_PER_PAGE, `Must be ${MAX_ITEMS_PER_PAGE} and below`),
+  mode: z.nativeEnum(CarouselModeEnum),
+  orientation: z.nativeEnum(CarouselOrientationEnum),
+  alignment: z.nativeEnum(CarouselAlignmentEnum),
+  autoplay: z.boolean(),
+  loop: z.boolean(),
+});
 
 export const CarouselFieldsSettings = () => {
-  const [newImage, setNewImage] = useState<CarouselImage | undefined>();
-
   const {
     state: { mode, orientation, alignment, loop, autoplay, itemsPerPage },
     actions: {
@@ -49,6 +65,18 @@ export const CarouselFieldsSettings = () => {
     },
   } = useCarouselSettings();
 
+  const form = useForm<z.infer<typeof carouselFormSchema>>({
+    resolver: zodResolver(carouselFormSchema),
+    defaultValues: {
+      mode: mode as CarouselModeEnum,
+      orientation: orientation as CarouselOrientationEnum,
+      alignment: alignment as CarouselAlignmentEnum,
+      loop,
+      autoplay,
+      itemsPerPage,
+    },
+  });
+
   const modeValues = useMemo(() => Object.values(CarouselModeEnum), [CarouselModeEnum]);
   const orientationValues = useMemo(
     () => Object.values(CarouselOrientationEnum),
@@ -59,63 +87,48 @@ export const CarouselFieldsSettings = () => {
     [CarouselAlignmentEnum]
   );
 
-  const handleChangeMode = useCallback((value: CarouselMode) => {
-    setMode(value);
-  }, []);
-
-  const handleChangeOrientation = useCallback((value: CarouselOrientation) => {
-    setOrientation(value);
-  }, []);
-
-  const handleChangeAlignment = useCallback((value: CarouselAlignmentOptions) => {
-    setAlignment(value);
-  }, []);
-
-  const handleChangeAutoplay = useCallback((value: boolean) => {
-    setAutoplay(value);
-  }, []);
-
-  const handleChangeLoop = useCallback((value: boolean) => {
-    setLoop(value);
-  }, []);
-
-
-  //TODO transform into form to prevent from entering invalid values
-  //and changing the value immediately on error
-  const handleChangeItemsPerPage = useCallback(
-    (value: string) => {
-      let items = isNaN(parseInt(value)) ? 1 : parseInt(value);
-
-      console.log(items, itemsPerPage);
-
-      if (items === itemsPerPage) {
-        return;
-      }
-
-      if (items > 3) {
-        setItemsPerPage(3);
-        return;
-      }
-
-      setItemsPerPage(items);
-    },
-    [itemsPerPage]
-  );
-
-  const handleChangeNewImageSrc = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setNewImage((prev) => ({ id: prev?.id ?? uuidv4(), src: value }));
-  }, []);
-
-  const handleSubmitNewImage = useCallback(() => {
-    if (newImage == null || !isImgUrl(newImage.src)) {
-      toast.error("Please enter a valid img url");
-      return;
+  const onSubmit = (values: z.infer<typeof carouselFormSchema>) => {
+    if (values.mode !== mode) {
+      setMode(values.mode);
+    }
+    if (values.orientation !== orientation) {
+      setOrientation(values.orientation);
     }
 
-    addImage({ ...newImage });
-    setNewImage(undefined);
-  }, [newImage]);
+    if (values.alignment !== alignment) {
+      setAlignment(values.alignment);
+    }
+
+    if (values.loop !== loop) {
+      setLoop(values.loop);
+    }
+
+    if (values.itemsPerPage !== itemsPerPage) {
+      setItemsPerPage(values.itemsPerPage);
+    }
+
+    if (values.autoplay !== autoplay) {
+      setAutoplay(values.autoplay);
+    }
+
+    if (values.image) {
+      addImage({ src: values.image, id: uuid() });
+    }
+
+    //form.formState.isDirty gets set to true when fields werent touched
+    if (
+      values.orientation !== orientation ||
+      values.alignment !== alignment ||
+      values.loop !== loop ||
+      values.itemsPerPage !== itemsPerPage ||
+      values.autoplay !== autoplay ||
+      !!values.image
+    ) {
+      toast("Settings updated");
+    }
+
+    form.resetField("image");
+  };
 
   return (
     <>
@@ -125,109 +138,187 @@ export const CarouselFieldsSettings = () => {
         </CardHeader>
 
         <CardContent>
-          <div className="grid w-full items-center gap-2">
-            <div className="flex flex-col justify-center w-full gap-2">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="image">Image</Label>
-                <Input
-                  className="w-full"
-                  placeholder="Image source"
-                  id="image"
-                  name="image"
-                  value={newImage?.src ?? ""}
-                  onChange={handleChangeNewImageSrc}
-                />
-              </div>
-              <div className="flex justify-end gap-4">
-                <Button
-                  title="Clear"
-                  type="button"
-                  variant="destructive"
-                  onClick={() => setNewImage(undefined)}
-                >
-                  Clear
-                </Button>
-                <Button title="Save" type="button" onClick={handleSubmitNewImage}>
-                  Save
-                </Button>
-              </div>
-            </div>
-
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="mode">Mode</Label>
-              <Select value={mode} onValueChange={handleChangeMode}>
-                <SelectTrigger id="mode">
-                  <SelectValue placeholder="Select mode" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {modeValues.map((mode) => (
-                    <SelectItem key={mode} value={mode}>
-                      {capitalize(mode)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="orientation">Orientation</Label>
-              <Select value={orientation} onValueChange={handleChangeOrientation}>
-                <SelectTrigger id="orientation">
-                  <SelectValue placeholder="Select orientation" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {orientationValues.map((orientation) => (
-                    <SelectItem key={orientation} value={orientation}>
-                      {capitalize(orientation)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="orientation">Alignment</Label>
-              <Select value={alignment} onValueChange={handleChangeAlignment}>
-                <SelectTrigger id="orientation">
-                  <SelectValue placeholder="Select orientation" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {alignmentValues.map((alignment) => (
-                    <SelectItem key={alignment} value={alignment}>
-                      {capitalize(alignment)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="itemsPerPage">Images Per Page</Label>
-              <Input
-                className="w-full"
-                placeholder="Images per page"
-                type="number"
-                min={0}
-                max={3}
-                id="itemsPerPage"
-                name="itemsPerPage"
-                value={itemsPerPage}
-                onChange={(e) => handleChangeItemsPerPage(e.target.value)}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Image</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          //Change undefined  to empty string
+                          // Prevents uncontrolled input errors
+                          value={field.value ?? ""}
+                          placeholder="img url"
+                          id="image"
+                        />
+                      </FormControl>
+                      <FormDescription>Image source</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
-            </div>
 
-            <div className="flex space-x-1.5 items-center">
-              <Switch id="autoplay" checked={autoplay} onCheckedChange={handleChangeAutoplay} />
-              <Label htmlFor="autoplay">Autoplay</Label>
-            </div>
+              <FormField
+                control={form.control}
+                name="mode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mode</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger id="mode">
+                          <SelectValue placeholder="Select mode" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent position="popper">
+                        {modeValues.map((mode) => (
+                          <SelectItem key={mode} value={mode}>
+                            {capitalize(mode)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
 
-            <div className="flex space-x-1.5 items-center">
-              <Switch id="loop" checked={loop} onCheckedChange={handleChangeLoop} />
-              <Label htmlFor="loop">Loop</Label>
-            </div>
-          </div>
+                    <FormDescription>The shape of the images</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="orientation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Orientation</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger id="orientation">
+                          <SelectValue placeholder="Select orientation" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent position="popper">
+                        {orientationValues.map((orientation) => (
+                          <SelectItem key={orientation} value={orientation}>
+                            {capitalize(orientation)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <FormDescription>
+                      Whether the carousel should be displayed horizontally or vertically
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="itemsPerPage"
+                disabled={form.watch("orientation") !== CarouselOrientationEnum.HORIZONTAL}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Images Per Page</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="number of images"
+                        type="number"
+                        min={MIN_ITEMS_PER_PAGE}
+                        max={MAX_ITEMS_PER_PAGE}
+                        value={
+                          //vertical carousel doesnt support multiple images
+                          form.watch("orientation") !== CarouselOrientationEnum.HORIZONTAL
+                            ? MIN_ITEMS_PER_PAGE
+                            : field.value
+                        }
+                        id="itemsPerPage"
+                      />
+                    </FormControl>
+                    <FormDescription>How many images to display at once</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="alignment"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Alignment</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger id="alignment">
+                          <SelectValue placeholder="Select alignment" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent position="popper">
+                        {alignmentValues.map((alignment) => (
+                          <SelectItem key={alignment} value={alignment}>
+                            {capitalize(alignment)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <FormDescription>Align images if multiple</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="loop"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                      <FormLabel>Loop carousel</FormLabel>
+                      <FormDescription>
+                        Whether the carousel should loop back to the beginning after reaching the
+                        last item
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="autoplay"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                      <FormLabel>Autoplay</FormLabel>
+                      <FormDescription>
+                        Whether the carousel should automatically move to the next item
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className="ml-auto block">
+                Submit
+              </Button>
+            </form>
+          </Form>
         </CardContent>
-        <CardFooter className="flex justify-between"></CardFooter>
       </Card>
     </>
   );

@@ -16,13 +16,13 @@ export const NavBar = () => {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/">Button</Link>
+          <Link to="/button">Button</Link>
         </li>
         <li>
-          <Link to="/">Carousel</Link>
+          <Link to="/carousel">Carousel</Link>
         </li>
         <li>
-          <Link to="/">TextArea</Link>
+          <Link to="/textarea">TextArea</Link>
         </li>
         <li>
           <ThemeSwitch />
