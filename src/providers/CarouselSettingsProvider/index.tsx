@@ -2,11 +2,11 @@ import { NO_CALLBACK } from "@/constants";
 import { CarouselReducerActionEnum } from "@/constants/enums";
 import { pluralize } from "@/lib/utils";
 import {
-  carouselReducerInitialState,
+  carouselInitialState,
   carouselSettingsReducer,
 } from "@/providers/CarouselSettingsProvider/reducer";
 import {
-  CarouselAlignmentOptions,
+  CarouselAlignment,
   CarouselImage,
   CarouselMode,
   CarouselOrientation,
@@ -23,7 +23,7 @@ type CarouselSettingsContextType = {
 };
 
 const CarouselSettingsContext = createContext<CarouselSettingsContextType>({
-  state: carouselReducerInitialState,
+  state: carouselInitialState,
   actions: {
     addImage: NO_CALLBACK,
     editImage: NO_CALLBACK,
@@ -38,7 +38,7 @@ const CarouselSettingsContext = createContext<CarouselSettingsContextType>({
 });
 
 export const CarouselSettingsProvider: ReactFCWithChildren = ({ children }) => {
-  const [state, dispatch] = useReducer(carouselSettingsReducer, carouselReducerInitialState);
+  const [state, dispatch] = useReducer(carouselSettingsReducer, carouselInitialState);
 
   const addImage = useCallback((image: CarouselImage) => {
     dispatch({ type: CarouselReducerActionEnum.ADD_IMAGE, payload: { image } });
@@ -70,7 +70,7 @@ export const CarouselSettingsProvider: ReactFCWithChildren = ({ children }) => {
     toast(`Mode is set to ${mode}`);
   }, []);
 
-  const setAlignment = useCallback((alignment: CarouselAlignmentOptions) => {
+  const setAlignment = useCallback((alignment: CarouselAlignment) => {
     dispatch({ type: CarouselReducerActionEnum.SET_ALIGNMENT, payload: { alignment } });
 
     toast(`Alignment is set to ${alignment}`);

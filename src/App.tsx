@@ -1,8 +1,7 @@
 import { DefaultLayout } from "@/layouts/DefaultLayout";
 import { PageLayout } from "@/layouts/PageLayout";
-import { SuspenseLayout } from "@/layouts/SuspenseLayout";
 import { ThemeProvider } from "@/providers/ThemeProvider";
-import { Spinner } from "@components/Spinner";
+import ErrorBoundary from "@components/ErrorBoundary";
 import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
@@ -15,26 +14,26 @@ const NotFoundPage = React.lazy(() => import("@/pages/404"));
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Suspense fallback={<Spinner />}>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<DefaultLayout />}>
-              <Route element={<PageLayout />}>
-                <Route element={<SuspenseLayout />}>
+    <ErrorBoundary>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <Suspense fallback={<div>Loading...</div>}>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<DefaultLayout />}>
+                <Route element={<PageLayout />}>
                   <Route path="/carousel" element={<CarouselPage />} />
                   <Route path="/button" element={<ButtonPage />} />
                   <Route path="/textarea" element={<TextareaPage />} />
                 </Route>
+                <Route path="/" element={<HomePage />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Route>
-              <Route path="/" element={<HomePage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </Suspense>
-      <Toaster />
-    </ThemeProvider>
+            </Routes>
+          </BrowserRouter>
+        </Suspense>
+        <Toaster />
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 

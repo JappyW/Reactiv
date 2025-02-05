@@ -1,6 +1,6 @@
 import { ButtonProps, ButtonSettingsActions } from "./button";
 import {
-  CarouselAlignmentOptions,
+  CarouselAlignment,
   CarouselImage,
   CarouselMode,
   CarouselOrientation,
@@ -17,7 +17,7 @@ export type ReactFCWithChildren<T = unknown> = React.FC<T & { children: React.Re
 export {
   type ButtonProps,
   type ButtonSettingsActions,
-  type CarouselAlignmentOptions,
+  type CarouselAlignment,
   type CarouselImage,
   type CarouselMode,
   type CarouselOrientation,

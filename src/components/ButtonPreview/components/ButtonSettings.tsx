@@ -16,16 +16,19 @@ import { z } from "zod";
 
 import {
     MAX_BUTTON_BORDER_RADIUS,
+    MAX_BUTTON_LABEL,
     MAX_BUTTON_PADDING,
     MIN_BUTTON_BORDER_RADIUS,
+    MIN_BUTTON_LABEL,
     MIN_BUTTON_PADDING,
 } from "@/constants";
 import { useButtonSettings } from "@/providers/ButtonSettingsProvider";
-import { ButtonProps } from "@/types";
-import { toast } from "sonner";
 
 const buttonFormSchema = z.object({
-  label: z.string().min(1, "Label is required"),
+  label: z
+    .string()
+    .min(MIN_BUTTON_LABEL, `Label must be above ${MIN_BUTTON_LABEL} characters`)
+    .max(MAX_BUTTON_LABEL, `Label must be below ${MAX_BUTTON_LABEL} characters`),
   link: z.string().url("Invalid URL").optional(),
   bgColor: z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid color code"),
   labelColor: z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid color code"),
@@ -77,10 +80,6 @@ export const ButtonSettings = () => {
   };
 
   const onSubmit = (values: z.infer<typeof buttonFormSchema>) => {
-    let showToast = Object.keys(buttonState).some(
-      (key) => values[key as keyof ButtonProps] !== buttonState[key as keyof ButtonProps]
-    );
-
     if (values.link && values.link !== link) {
       setLink(values.link);
     }
@@ -103,11 +102,6 @@ export const ButtonSettings = () => {
 
     if (values.padding !== padding) {
       setPadding(values.padding);
-    }
-
-    //form.formState.isDirty gets set to true when fields werent touched
-    if (showToast) {
-      toast("Settings updated");
     }
   };
 
@@ -197,7 +191,7 @@ export const ButtonSettings = () => {
                   );
                 }}
               />
-              <div className="flex justify-between flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4">
                 <div className="w-50">
                   <FormField
                     control={form.control}
@@ -250,7 +244,7 @@ export const ButtonSettings = () => {
                 </div>
               </div>
               <div className="flex justify-end gap-4">
-                <Button type="button" variant="destructive" onClick={resetFormFields}>
+                <Button type="submit" variant="destructive" onClick={resetFormFields}>
                   Reset
                 </Button>
                 <Button variant="secondary" type="submit">

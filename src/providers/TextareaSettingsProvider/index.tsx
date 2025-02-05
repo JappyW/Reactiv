@@ -3,7 +3,7 @@ import { TextareaReducerActionEnum } from "@/constants/enums";
 import { ReactFCWithChildren, TextareaProps, TextareaSettingsActions } from "@/types";
 import { createContext, useCallback, useContext, useReducer } from "react";
 import { toast } from "sonner";
-import { textareaReducerInitialState, textareaSettingsReducer } from "./reducer";
+import { textareaInitialState, textareaSettingsReducer } from "./reducer";
 
 type TextareaSettingsContextType = {
   state: TextareaProps;
@@ -11,7 +11,7 @@ type TextareaSettingsContextType = {
 };
 
 const TextareaSettingsContext = createContext<TextareaSettingsContextType>({
-  state: textareaReducerInitialState,
+  state: textareaInitialState,
   actions: {
     setTitle: NO_CALLBACK,
     setTitleColor: NO_CALLBACK,
@@ -21,7 +21,7 @@ const TextareaSettingsContext = createContext<TextareaSettingsContextType>({
 });
 
 export const TextareaSettingsProvider: ReactFCWithChildren = ({ children }) => {
-  const [state, dispatch] = useReducer(textareaSettingsReducer, textareaReducerInitialState);
+  const [state, dispatch] = useReducer(textareaSettingsReducer, textareaInitialState);
 
   const setTitle = useCallback((title: string) => {
     dispatch({ type: TextareaReducerActionEnum.SET_TITLE, payload: { title } });

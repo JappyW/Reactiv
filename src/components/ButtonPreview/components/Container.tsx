@@ -1,6 +1,7 @@
 import { MobileButton } from "@/mobile/components/Button";
 import { useButtonSettings } from "@/providers/ButtonSettingsProvider";
-import { Card, CardContent, CardHeader, CardTitle } from "@components/ShadCN";
+import { PhoneScreen } from "@components/PhoneScreen";
+import { Card, CardHeader, CardTitle } from "@components/ShadCN";
 
 export const ButtonContainer = () => {
   const {
@@ -13,9 +14,10 @@ export const ButtonContainer = () => {
         <CardTitle>Button Preview</CardTitle>
       </CardHeader>
 
-      <CardContent>
+      <PhoneScreen>
         <MobileButton
           {...rest}
+          className="max-w-72"
           borderRadius={borderRadius}
           padding={padding}
           bgColor={bgColor}
@@ -23,7 +25,7 @@ export const ButtonContainer = () => {
           link={link}
           labelColor={labelColor}
         />
-      </CardContent>
+      </PhoneScreen>
     </Card>
   );
 };

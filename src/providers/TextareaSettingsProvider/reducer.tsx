@@ -10,9 +10,9 @@ export type TextareaReducerActionTypes =
       payload: { descriptionColor: string };
     };
 
-export const textareaReducerInitialState: TextareaProps = {
+export const textareaInitialState: TextareaProps = {
   title: "Hello there Text Area 👋",
-  titleColor: "#000000",
+  titleColor: "#ffffff",
   description: "Example description",
   descriptionColor: "#ffffff",
 };

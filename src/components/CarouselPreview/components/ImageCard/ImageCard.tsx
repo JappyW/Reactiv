@@ -21,17 +21,19 @@ export const ImageCard = ({
   return (
     <div
       key={image.id}
-      className="basis-1/3 relative max-h-56 max-w-56 border-solid border-2 border-input rounded-md p-1"
+      className="basis-1/3 relative max-h-56 max-w-56 min-w-40 border-solid border-2 border-input rounded-md p-1"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <img
         src={image.src}
         alt={`${image.src}_removable_image`}
-        className="min-w-52 min-h-52 rounded-md pointer-events-none"
+        className="w-52 h-52 rounded-md pointer-events-none"
       />
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center bg-background w-full h-full ${isHovered ? "" : "hidden"}`}
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center bg-background w-full h-full ${
+          isHovered ? "" : "hidden"
+        }`}
       >
         <div className="">{title}</div>
 

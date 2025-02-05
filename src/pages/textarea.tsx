@@ -1,10 +1,13 @@
 import { TextareaSettingsProvider } from "@/providers/TextareaSettingsProvider";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { TextareaPreview } from "@components/TextareaPreview";
 
 const TextareaPage = () => {
   return (
     <TextareaSettingsProvider>
-      <TextareaPreview />
+      <ErrorBoundary>
+        <TextareaPreview />
+      </ErrorBoundary>
     </TextareaSettingsProvider>
   );
 };

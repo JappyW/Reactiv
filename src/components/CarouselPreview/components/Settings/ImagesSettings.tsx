@@ -52,10 +52,22 @@ export const CarouselImagesSettings = () => {
     setExistingImage(undefined);
   }, [existingImage]);
 
-  const handleEditImageClick = (image: CarouselImage) => {
+  const handleEditImageClick = useCallback((image: CarouselImage) => {
     setExistingImage(image);
     setEditModalOpen(true);
-  };
+  }, []);
+
+  const handleRemoveImage = useCallback(
+    (id: string) => {
+      if (images.length === 1) {
+        toast.error("You can't remove the last image");
+        return;
+      }
+
+      removeImage(id);
+    },
+    [images.length]
+  );
 
   return (
     <Card className="w-full">
@@ -85,7 +97,7 @@ export const CarouselImagesSettings = () => {
                   image={image}
                   title={title}
                   editImageClick={() => handleEditImageClick(image)}
-                  removeImage={() => removeImage(image.id)}
+                  removeImage={() => handleRemoveImage(image.id)}
                 />
               );
 
@@ -95,7 +107,7 @@ export const CarouselImagesSettings = () => {
                 image={image}
                 title={title}
                 editImageClick={() => handleEditImageClick(image)}
-                removeImage={() => removeImage(image.id)}
+                removeImage={() => handleRemoveImage(image.id)}
               />
             );
           })}

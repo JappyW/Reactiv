@@ -1,5 +1,4 @@
-import { LeftColumn } from "@/layouts/LeftColumn";
-import { RightColumn } from "@/layouts/RightColumn";
+import { LeftColumn, RightColumn } from "@/layouts/ColumnLayout";
 import { ButtonSettings } from "@components/ButtonPreview/components/ButtonSettings";
 import { ButtonContainer } from "@components/ButtonPreview/components/Container";
 

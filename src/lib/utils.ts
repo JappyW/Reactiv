@@ -1,5 +1,6 @@
 import { IMG_REGEX } from "@/constants";
 import { clsx, type ClassValue } from "clsx";
+import { ErrorInfo } from "react";
 import { twMerge } from "tailwind-merge";
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -23,4 +24,9 @@ export const pluralize = (word: string, numberOfItems: number, endWith?: string)
   }
 
   return word;
+};
+
+//can be changed to use any logging service in the future
+export const logError = (text: string, error: Error, errorInfo: ErrorInfo) => {
+  console.error(text, error, errorInfo);
 };

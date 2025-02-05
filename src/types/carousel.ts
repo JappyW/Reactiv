@@ -10,11 +10,11 @@ export type CarouselProps = {
   mode: CarouselMode;
   loop: boolean;
   autoplay: boolean;
-  alignment: CarouselAlignmentOptions;
+  alignment: CarouselAlignment;
   itemsPerPage: number;
 };
 
-export type CarouselAlignmentOptions = `${CarouselAlignmentEnum}`;
+export type CarouselAlignment = `${CarouselAlignmentEnum}`;
 export type CarouselMode = `${CarouselModeEnum}`;
 export type CarouselOrientation = `${CarouselOrientationEnum}`;
 
@@ -26,7 +26,7 @@ export type CarouselSettingsActions = {
   removeImage: (id: string) => void;
   setMode: (mode: CarouselMode) => void;
   setOrientation: (orientation: CarouselOrientation) => void;
-  setAlignment: (alignment: CarouselAlignmentOptions) => void;
+  setAlignment: (alignment: CarouselAlignment) => void;
   setLoop: (loop: boolean) => void;
   setAutoplay: (autoplay: boolean) => void;
   setItemsPerPage: (itemsPerPage: number) => void;

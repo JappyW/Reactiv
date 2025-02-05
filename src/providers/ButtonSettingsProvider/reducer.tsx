@@ -9,10 +9,10 @@ export type ButtonReducerActionTypes =
   | { type: ButtonReducerActionEnum.SET_PADDING; payload: { padding: number } }
   | { type: ButtonReducerActionEnum.SET_BORDER_RADIUS; payload: { borderRadius: number } };
 
-export const buttonReducerInitialState: ButtonProps = {
+export const buttonInitialState: ButtonProps = {
   label: "Save",
-  bgColor: "#000",
-  labelColor: "#fff",
+  bgColor: "#179641",
+  labelColor: "#ffffff",
   borderRadius: 0,
   padding: 0,
   link: undefined,

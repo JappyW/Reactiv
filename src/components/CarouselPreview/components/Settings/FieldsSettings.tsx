@@ -35,8 +35,6 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { CarouselProps } from "@/types";
-import { toast } from "sonner";
 import { v4 as uuid } from "uuid";
 
 const carouselFormSchema = z.object({
@@ -95,12 +93,6 @@ export const CarouselFieldsSettings = () => {
   };
 
   const onSubmit = (values: z.infer<typeof carouselFormSchema>) => {
-    let showToast = Object.keys(carouselState).some(
-      (key) =>
-        values[key as keyof Omit<CarouselProps, "images">] !==
-        carouselState[key as keyof CarouselProps]
-    );
-
     if (values.mode !== mode) {
       setMode(values.mode);
     }
@@ -128,10 +120,7 @@ export const CarouselFieldsSettings = () => {
       addImage({ src: values.image, id: uuid() });
     }
 
-    //form.formState.isDirty gets set to true when fields werent touched
-    if (showToast || !!values.image) {
-      toast("Settings updated");
-    }
+    form.resetField("image");
   };
 
   return (
@@ -173,7 +162,7 @@ export const CarouselFieldsSettings = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Mode</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger id="mode">
                         <SelectValue placeholder="Select mode" />
@@ -200,7 +189,7 @@ export const CarouselFieldsSettings = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Orientation</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger id="orientation">
                         <SelectValue placeholder="Select orientation" />
@@ -226,13 +215,13 @@ export const CarouselFieldsSettings = () => {
             <FormField
               control={form.control}
               name="itemsPerPage"
-              disabled={form.watch("orientation") !== CarouselOrientationEnum.HORIZONTAL}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Images Per Page</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
+                      disabled={form.watch("orientation") !== CarouselOrientationEnum.HORIZONTAL}
                       placeholder="number of images"
                       type="number"
                       min={MIN_ITEMS_PER_PAGE}
@@ -244,6 +233,11 @@ export const CarouselFieldsSettings = () => {
                           : field.value
                       }
                       id="itemsPerPage"
+                      title={
+                        form.watch("orientation") !== CarouselOrientationEnum.HORIZONTAL
+                          ? "Vertical carousel only supports one image"
+                          : ""
+                      }
                     />
                   </FormControl>
                   <FormDescription>How many images to display at once</FormDescription>
@@ -258,7 +252,7 @@ export const CarouselFieldsSettings = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Alignment</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger id="alignment">
                         <SelectValue placeholder="Select alignment" />
@@ -317,7 +311,7 @@ export const CarouselFieldsSettings = () => {
             />
 
             <div className="flex justify-end gap-4">
-              <Button variant="destructive" type="button" onClick={resetFormFields}>
+              <Button variant="destructive" type="submit" onClick={resetFormFields}>
                 Reset
               </Button>
               <Button variant="secondary" type="submit">

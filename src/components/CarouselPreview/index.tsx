@@ -1,8 +1,8 @@
-import { LeftColumn } from "@/layouts/LeftColumn";
-import { RightColumn } from "@/layouts/RightColumn";
+import { LeftColumn, RightColumn } from "@/layouts/ColumnLayout";
 import { CarouselContainer } from "./components/Container";
 import { CarouselFieldsSettings } from "./components/Settings/FieldsSettings";
 import { CarouselImagesSettings } from "./components/Settings/ImagesSettings";
+
 export const CarouselPreview = () => {
   return (
     <>

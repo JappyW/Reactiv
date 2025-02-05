@@ -21,8 +21,7 @@ import {
   MIN_TEXTAREA_TITLE_LENGTH,
 } from "@/constants";
 import { useTextareaSettings } from "@/providers/TextareaSettingsProvider";
-import { TextareaProps } from "@/types";
-import { toast } from "sonner";
+import { useCallback } from "react";
 
 const textareaFormSchema = z.object({
   title: z
@@ -42,39 +41,39 @@ const textareaFormSchema = z.object({
 
 export const TextareaSettings = () => {
   const {
-    state: textareaState,
+    state: { description, descriptionColor, title, titleColor },
     actions: { setDescription, setDescriptionColor, setTitle, setTitleColor },
   } = useTextareaSettings();
-
-  const { description, descriptionColor, title, titleColor } = textareaState;
 
   const [descriptionColorFromPicker, setDescriptionColorFromPicker] = useColor(descriptionColor);
   const [titleColorFromPicker, setTitleColorFromPicker] = useColor(titleColor);
 
   const form = useForm<z.infer<typeof textareaFormSchema>>({
     resolver: zodResolver(textareaFormSchema),
-    defaultValues: textareaState,
+    defaultValues: { description, descriptionColor, title, titleColor },
   });
 
   const resetFormFields = () => {
     form.reset();
   };
 
-  const handleChangeTitleColor = (newColor: IColor, onChange: (...event: any[]) => void) => {
-    setTitleColorFromPicker(newColor);
-    onChange(newColor.hex);
-  };
+  const handleChangeTitleColor = useCallback(
+    (newColor: IColor, onChange: (...event: any[]) => void) => {
+      setTitleColorFromPicker(newColor);
+      onChange(newColor.hex);
+    },
+    []
+  );
 
-  const handleChangeDescriptionColor = (newColor: IColor, onChange: (...event: any[]) => void) => {
-    setDescriptionColorFromPicker(newColor);
-    onChange(newColor.hex);
-  };
+  const handleChangeDescriptionColor = useCallback(
+    (newColor: IColor, onChange: (...event: any[]) => void) => {
+      setDescriptionColorFromPicker(newColor);
+      onChange(newColor.hex);
+    },
+    []
+  );
 
   const onSubmit = (values: z.infer<typeof textareaFormSchema>) => {
-    let showToast = Object.keys(textareaState).some(
-      (key) => values[key as keyof TextareaProps] !== textareaState[key as keyof TextareaProps]
-    );
-
     if (values.title !== title) {
       setTitle(values.title);
     }
@@ -89,10 +88,6 @@ export const TextareaSettings = () => {
 
     if (values.descriptionColor !== descriptionColor) {
       setDescriptionColor(values.descriptionColor);
-    }
-
-    if (showToast) {
-      toast("Settings updated");
     }
   };
 
@@ -191,7 +186,7 @@ export const TextareaSettings = () => {
               </div>
             </div>
             <div className="flex justify-end gap-4">
-              <Button type="button" variant="destructive" onClick={resetFormFields}>
+              <Button type="submit" variant="destructive" onClick={resetFormFields}>
                 Reset
               </Button>
               <Button variant="secondary" type="submit">

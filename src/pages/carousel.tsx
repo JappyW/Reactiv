@@ -1,10 +1,13 @@
 import { CarouselSettingsProvider } from "@/providers/CarouselSettingsProvider";
 import { CarouselPreview } from "@components/CarouselPreview";
+import ErrorBoundary from "@components/ErrorBoundary";
 
 const CarouselPage = () => {
   return (
     <CarouselSettingsProvider>
-      <CarouselPreview />
+      <ErrorBoundary>
+        <CarouselPreview />
+      </ErrorBoundary>
     </CarouselSettingsProvider>
   );
 };

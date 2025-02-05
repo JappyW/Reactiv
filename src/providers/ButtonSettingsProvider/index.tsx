@@ -3,7 +3,7 @@ import { ButtonReducerActionEnum } from "@/constants/enums";
 import { ButtonProps, ButtonSettingsActions, ReactFCWithChildren } from "@/types";
 import { createContext, useCallback, useContext, useReducer } from "react";
 import { toast } from "sonner";
-import { buttonReducerInitialState, buttonSettingsReducer } from "./reducer";
+import { buttonInitialState, buttonSettingsReducer } from "./reducer";
 
 type ButtonSettingsContextType = {
   state: ButtonProps;
@@ -11,7 +11,7 @@ type ButtonSettingsContextType = {
 };
 
 const ButtonSettingsContext = createContext<ButtonSettingsContextType>({
-  state: buttonReducerInitialState,
+  state: buttonInitialState,
   actions: {
     setBGColor: NO_CALLBACK,
     setLabel: NO_CALLBACK,
@@ -23,7 +23,7 @@ const ButtonSettingsContext = createContext<ButtonSettingsContextType>({
 });
 
 export const ButtonSettingsProvider: ReactFCWithChildren = ({ children }) => {
-  const [state, dispatch] = useReducer(buttonSettingsReducer, buttonReducerInitialState);
+  const [state, dispatch] = useReducer(buttonSettingsReducer, buttonInitialState);
 
   const setLabel = useCallback((label: string) => {
     dispatch({ type: ButtonReducerActionEnum.SET_LABEL, payload: { label } });
