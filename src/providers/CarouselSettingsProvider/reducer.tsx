@@ -68,7 +68,7 @@ export const carouselInitialState: CarouselProps = {
     },
   ],
   orientation: CarouselOrientationEnum.HORIZONTAL,
-  mode: CarouselModeEnum.LANDSCAPE,
+  mode: CarouselModeEnum.PORTRAIT,
   loop: true,
   autoplay: true,
   alignment: "start",

@@ -14,30 +14,9 @@ import { ColorPicker, IColor, useColor } from "react-color-palette";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  MAX_TEXTAREA_DESCRIPTION_LENGTH,
-  MAX_TEXTAREA_TITLE_LENGTH,
-  MIN_TEXTAREA_DESCRIPTION_LENGTH,
-  MIN_TEXTAREA_TITLE_LENGTH,
-} from "@/constants";
+import { textareaFormSchema } from "@/constants/validationSchemas";
 import { useTextareaSettings } from "@/providers/TextareaSettingsProvider";
 import { useCallback } from "react";
-
-const textareaFormSchema = z.object({
-  title: z
-    .string()
-    .min(MIN_TEXTAREA_TITLE_LENGTH, `Title must ${MIN_TEXTAREA_TITLE_LENGTH} character or more`)
-    .max(MAX_TEXTAREA_TITLE_LENGTH, "Title is too long"),
-  description: z
-    .string()
-    .min(
-      MIN_TEXTAREA_DESCRIPTION_LENGTH,
-      `Description must ${MIN_TEXTAREA_DESCRIPTION_LENGTH} character or more`
-    )
-    .max(MAX_TEXTAREA_DESCRIPTION_LENGTH, "Description is too long"),
-  titleColor: z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid color code"),
-  descriptionColor: z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid color code"),
-});
 
 export const TextareaSettings = () => {
   const {
@@ -53,9 +32,9 @@ export const TextareaSettings = () => {
     defaultValues: { description, descriptionColor, title, titleColor },
   });
 
-  const resetFormFields = () => {
+  const resetFormFields = useCallback(() => {
     form.reset();
-  };
+  }, []);
 
   const handleChangeTitleColor = useCallback(
     (newColor: IColor, onChange: (...event: any[]) => void) => {
@@ -106,7 +85,7 @@ export const TextareaSettings = () => {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel htmlFor="title">Title</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Title..." id="title" />
                     </FormControl>
@@ -122,7 +101,7 @@ export const TextareaSettings = () => {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel htmlFor="description">Description</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Any text will do..." id="description" />
                     </FormControl>
@@ -141,9 +120,9 @@ export const TextareaSettings = () => {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Title color</FormLabel>
+                        <FormLabel htmlFor="titleColor">Title color</FormLabel>
                         <FormControl>
-                          <div className="w-56">
+                          <div className="w-56" id="titleColor">
                             <ColorPicker
                               height={100}
                               hideInput={["rgb", "hsv"]}
@@ -166,9 +145,9 @@ export const TextareaSettings = () => {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Description color</FormLabel>
+                        <FormLabel htmlFor="descriptionColor">Description color</FormLabel>
                         <FormControl>
-                          <div className="w-56">
+                          <div className="w-56" id="descriptionColor">
                             <ColorPicker
                               height={100}
                               hideInput={["rgb", "hsv"]}

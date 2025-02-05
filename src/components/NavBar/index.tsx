@@ -1,4 +1,4 @@
-import { ReactivLogoSVG } from "@/icons/ReactivLogo";
+import { ReactivLogoSVG } from "@components/Icons/ReactivLogo";
 import { ThemeSwitch } from "@components/ThemeSwitch";
 
 import { Link } from "react-router";
@@ -13,16 +13,36 @@ export const NavBar = () => {
       </div>
       <ul className="flex flex-wrap gap-4 items-center">
         <li>
-          <Link to="/">Home</Link>
+          <Link
+            to="/"
+            className="w-24 hover:outline hover:outline-2 p-1 rounded-sm text-center block"
+          >
+            Home
+          </Link>
         </li>
         <li>
-          <Link to="/button">Button</Link>
+          <Link
+            to="/button"
+            className="w-24 hover:outline hover:outline-2 p-1 rounded-sm text-center block"
+          >
+            Button
+          </Link>
         </li>
         <li>
-          <Link to="/carousel">Carousel</Link>
+          <Link
+            to="/carousel"
+            className="w-24 hover:outline hover:outline-2 p-1 rounded-sm text-center block"
+          >
+            Carousel
+          </Link>
         </li>
         <li>
-          <Link to="/textarea">TextArea</Link>
+          <Link
+            to="/textarea"
+            className="w-24 hover:outline hover:outline-2 p-1 rounded-sm text-center block"
+          >
+            TextArea
+          </Link>
         </li>
         <li>
           <ThemeSwitch />

@@ -23,32 +23,35 @@ const TextareaSettingsContext = createContext<TextareaSettingsContextType>({
 export const TextareaSettingsProvider: ReactFCWithChildren = ({ children }) => {
   const [state, dispatch] = useReducer(textareaSettingsReducer, textareaInitialState);
 
-  const setTitle = useCallback((title: string) => {
+  const setTitle: TextareaSettingsActions["setTitle"] = useCallback((title) => {
     dispatch({ type: TextareaReducerActionEnum.SET_TITLE, payload: { title } });
 
     toast(`Set textarea title to ${title}`);
   }, []);
 
-  const setTitleColor = useCallback((titleColor: string) => {
+  const setTitleColor: TextareaSettingsActions["setTitleColor"] = useCallback((titleColor) => {
     dispatch({ type: TextareaReducerActionEnum.SET_TITLE_COLOR, payload: { titleColor } });
 
     toast(`Set textarea title color to ${titleColor}`);
   }, []);
 
-  const setDescription = useCallback((description: string) => {
+  const setDescription: TextareaSettingsActions["setDescription"] = useCallback((description) => {
     dispatch({ type: TextareaReducerActionEnum.SET_DESCRIPTION, payload: { description } });
 
     toast(`Set textarea description to ${description}`);
   }, []);
 
-  const setDescriptionColor = useCallback((descriptionColor: string) => {
-    dispatch({
-      type: TextareaReducerActionEnum.SET_DESCRIPTION_COLOR,
-      payload: { descriptionColor },
-    });
+  const setDescriptionColor: TextareaSettingsActions["setDescriptionColor"] = useCallback(
+    (descriptionColor) => {
+      dispatch({
+        type: TextareaReducerActionEnum.SET_DESCRIPTION_COLOR,
+        payload: { descriptionColor },
+      });
 
-    toast(`Set textarea description background color to ${descriptionColor}`);
-  }, []);
+      toast(`Set textarea description background color to ${descriptionColor}`);
+    },
+    []
+  );
 
   return (
     <TextareaSettingsContext.Provider

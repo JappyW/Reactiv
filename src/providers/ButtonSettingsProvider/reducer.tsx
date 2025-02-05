@@ -4,7 +4,7 @@ import { ButtonProps } from "@/types";
 export type ButtonReducerActionTypes =
   | { type: ButtonReducerActionEnum.SET_LABEL; payload: { label: string } }
   | { type: ButtonReducerActionEnum.SET_LABEL_COLOR; payload: { labelColor: string } }
-  | { type: ButtonReducerActionEnum.SET_LINK; payload: { link: string } }
+  | { type: ButtonReducerActionEnum.SET_LINK; payload: { link?: string } }
   | { type: ButtonReducerActionEnum.SET_BG_COLOR; payload: { bgColor: string } }
   | { type: ButtonReducerActionEnum.SET_PADDING; payload: { padding: number } }
   | { type: ButtonReducerActionEnum.SET_BORDER_RADIUS; payload: { borderRadius: number } };

@@ -1,6 +1,6 @@
 import { CarouselSettingsProvider } from "@/providers/CarouselSettingsProvider";
-import { CarouselPreview } from "@components/CarouselPreview";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { CarouselPreview } from "@components/Previews/CarouselPreview";
 
 const CarouselPage = () => {
   return (

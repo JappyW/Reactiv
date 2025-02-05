@@ -1,6 +1,6 @@
 import { ButtonSettingsProvider } from "@/providers/ButtonSettingsProvider";
-import { ButtonPreview } from "@components/ButtonPreview";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { ButtonPreview } from "@components/Previews/ButtonPreview";
 
 const ButtonPage = () => {
   return (

@@ -1,8 +1,8 @@
 import { isImgUrl } from "@/lib/utils";
 import { useCarouselSettings } from "@/providers/CarouselSettingsProvider";
 import { CarouselImage } from "@/types";
-import { ImageCard } from "@components/CarouselPreview/components/ImageCard/ImageCard";
-import { ImageCardMobile } from "@components/CarouselPreview/components/ImageCard/ImageCardMobile";
+import { ImageCard } from "@components/Previews/CarouselPreview/components/ImageCard/ImageCard";
+import { ImageCardMobile } from "@components/Previews/CarouselPreview/components/ImageCard/ImageCardMobile";
 import {
   Button,
   Card,

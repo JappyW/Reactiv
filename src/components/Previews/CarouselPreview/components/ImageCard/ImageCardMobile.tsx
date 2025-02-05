@@ -25,7 +25,7 @@ export const ImageCardMobile = ({
         variant="destructive"
         size="icon"
         className="absolute right-0 top-0 h-7 w-7 m-1"
-        onClick={() => removeImage()}
+        onClick={removeImage}
       >
         <XIcon className="h-4 w-4" />
       </Button>
@@ -35,7 +35,7 @@ export const ImageCardMobile = ({
         type="button"
         size="icon"
         className="absolute left-0 top-0 h-7 w-7 m-1"
-        onClick={() => editImageClick()}
+        onClick={editImageClick}
       >
         <Pencil className="h-4 w-4" />
       </Button>

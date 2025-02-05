@@ -6,13 +6,9 @@ import {
   carouselSettingsReducer,
 } from "@/providers/CarouselSettingsProvider/reducer";
 import {
-  CarouselAlignment,
-  CarouselImage,
-  CarouselMode,
-  CarouselOrientation,
   CarouselProps,
   CarouselSettingsActions,
-  ReactFCWithChildren,
+  ReactFCWithChildren
 } from "@/types";
 import { createContext, useCallback, useContext, useReducer } from "react";
 import { toast } from "sonner";
@@ -40,59 +36,65 @@ const CarouselSettingsContext = createContext<CarouselSettingsContextType>({
 export const CarouselSettingsProvider: ReactFCWithChildren = ({ children }) => {
   const [state, dispatch] = useReducer(carouselSettingsReducer, carouselInitialState);
 
-  const addImage = useCallback((image: CarouselImage) => {
+  const addImage: CarouselSettingsActions["addImage"] = useCallback((image) => {
     dispatch({ type: CarouselReducerActionEnum.ADD_IMAGE, payload: { image } });
 
     toast("Added an image");
   }, []);
 
-  const editImage = useCallback((image: CarouselImage) => {
+  const editImage: CarouselSettingsActions["editImage"] = useCallback((image) => {
     dispatch({ type: CarouselReducerActionEnum.EDIT_IMAGE, payload: { image } });
 
     toast("Edited the image");
   }, []);
 
-  const removeImage = useCallback((id: string): void => {
+  const removeImage: CarouselSettingsActions["removeImage"] = useCallback((id) => {
     dispatch({ type: CarouselReducerActionEnum.REMOVE_IMAGE, payload: { id } });
 
     toast("Removed the image");
   }, []);
 
-  const setOrientation = useCallback((orientation: CarouselOrientation): void => {
-    dispatch({ type: CarouselReducerActionEnum.SET_ORIENTATION, payload: { orientation } });
+  const setOrientation: CarouselSettingsActions["setOrientation"] = useCallback(
+    (orientation): void => {
+      dispatch({ type: CarouselReducerActionEnum.SET_ORIENTATION, payload: { orientation } });
 
-    toast(`Orientation is set to ${orientation}`);
-  }, []);
+      toast(`Orientation is set to ${orientation}`);
+    },
+    []
+  );
 
-  const setMode = useCallback((mode: CarouselMode) => {
+  const setMode: CarouselSettingsActions["setMode"] = useCallback((mode) => {
     dispatch({ type: CarouselReducerActionEnum.SET_MODE, payload: { mode } });
 
     toast(`Mode is set to ${mode}`);
   }, []);
 
-  const setAlignment = useCallback((alignment: CarouselAlignment) => {
+  const setAlignment: CarouselSettingsActions["setAlignment"] = useCallback((alignment) => {
     dispatch({ type: CarouselReducerActionEnum.SET_ALIGNMENT, payload: { alignment } });
 
     toast(`Alignment is set to ${alignment}`);
   }, []);
 
-  const setLoop = useCallback((loop: boolean) => {
+  const setLoop: CarouselSettingsActions["setLoop"] = useCallback((loop) => {
     dispatch({ type: CarouselReducerActionEnum.SET_LOOP, payload: { loop } });
 
     toast(`Loop is set to ${loop ? "enabled" : "disabled"}`);
   }, []);
 
-  const setAutoplay = useCallback((autoplay: boolean) => {
+  const setAutoplay: CarouselSettingsActions["setAutoplay"] = useCallback((autoplay) => {
     dispatch({ type: CarouselReducerActionEnum.SET_AUTOPLAY, payload: { autoplay } });
 
     toast(`Autoplay is set to ${autoplay ? "enabled" : "disabled"}`);
   }, []);
 
-  const setItemsPerPage = useCallback((itemsPerPage: number) => {
-    dispatch({ type: CarouselReducerActionEnum.SET_ITEMS_PER_PAGE, payload: { itemsPerPage } });
+  const setItemsPerPage: CarouselSettingsActions["setItemsPerPage"] = useCallback(
+    (itemsPerPage) => {
+      dispatch({ type: CarouselReducerActionEnum.SET_ITEMS_PER_PAGE, payload: { itemsPerPage } });
 
-    toast(`Set ${itemsPerPage} ${pluralize("image", itemsPerPage)} to be displayed per page`);
-  }, []);
+      toast(`Set ${itemsPerPage} ${pluralize("image", itemsPerPage)} to be displayed per page`);
+    },
+    []
+  );
 
   return (
     <CarouselSettingsContext.Provider

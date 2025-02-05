@@ -19,7 +19,7 @@ import {
   Switch,
 } from "@components/ShadCN";
 
-import { IMG_REGEX, MAX_ITEMS_PER_PAGE, MIN_ITEMS_PER_PAGE } from "@/constants";
+import { MAX_ITEMS_PER_PAGE, MIN_ITEMS_PER_PAGE } from "@/constants";
 import { capitalize } from "@/lib/utils";
 import {
   Form,
@@ -31,28 +31,16 @@ import {
   FormMessage,
 } from "@components/ShadCN/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { carouselFormSchema } from "@/constants/validationSchemas";
 import { v4 as uuid } from "uuid";
-
-const carouselFormSchema = z.object({
-  image: z.string().regex(IMG_REGEX, "Invalid image url").optional().or(z.literal("")),
-  itemsPerPage: z.coerce
-    .number()
-    .gte(MIN_ITEMS_PER_PAGE, `Must be ${MIN_ITEMS_PER_PAGE} and above`)
-    .lte(MAX_ITEMS_PER_PAGE, `Must be ${MAX_ITEMS_PER_PAGE} and below`),
-  mode: z.nativeEnum(CarouselModeEnum),
-  orientation: z.nativeEnum(CarouselOrientationEnum),
-  alignment: z.nativeEnum(CarouselAlignmentEnum),
-  autoplay: z.boolean(),
-  loop: z.boolean(),
-});
 
 export const CarouselFieldsSettings = () => {
   const {
-    state: carouselState,
+    state: { mode, orientation, alignment, loop, autoplay, itemsPerPage },
     actions: {
       setMode,
       setOrientation,
@@ -63,8 +51,6 @@ export const CarouselFieldsSettings = () => {
       setItemsPerPage,
     },
   } = useCarouselSettings();
-
-  const { mode, orientation, alignment, loop, autoplay, itemsPerPage } = carouselState;
 
   const form = useForm<z.infer<typeof carouselFormSchema>>({
     resolver: zodResolver(carouselFormSchema),
@@ -88,9 +74,9 @@ export const CarouselFieldsSettings = () => {
     [CarouselAlignmentEnum]
   );
 
-  const resetFormFields = () => {
+  const resetFormFields = useCallback(() => {
     form.reset();
-  };
+  }, [form.reset]);
 
   const onSubmit = (values: z.infer<typeof carouselFormSchema>) => {
     if (values.mode !== mode) {
@@ -138,7 +124,7 @@ export const CarouselFieldsSettings = () => {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Image</FormLabel>
+                    <FormLabel htmlFor="image">Image</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -161,7 +147,7 @@ export const CarouselFieldsSettings = () => {
               name="mode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mode</FormLabel>
+                  <FormLabel htmlFor="mode">Mode</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger id="mode">
@@ -188,7 +174,7 @@ export const CarouselFieldsSettings = () => {
               name="orientation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Orientation</FormLabel>
+                  <FormLabel htmlFor="orientation">Orientation</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger id="orientation">
@@ -217,7 +203,7 @@ export const CarouselFieldsSettings = () => {
               name="itemsPerPage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Images Per Page</FormLabel>
+                  <FormLabel htmlFor="itemsPerPage">Images Per Page</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -250,9 +236,23 @@ export const CarouselFieldsSettings = () => {
               control={form.control}
               name="alignment"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Alignment</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                <FormItem
+                  title={
+                    form.watch("orientation") !== CarouselOrientationEnum.HORIZONTAL
+                      ? "Vertical carousel doesnt support alignment"
+                      : ""
+                  }
+                >
+                  <FormLabel htmlFor="alignment">Alignment</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={
+                      form.watch("orientation") !== CarouselOrientationEnum.HORIZONTAL
+                        ? CarouselAlignmentEnum.START
+                        : field.value
+                    }
+                    disabled={form.watch("orientation") !== CarouselOrientationEnum.HORIZONTAL}
+                  >
                     <FormControl>
                       <SelectTrigger id="alignment">
                         <SelectValue placeholder="Select alignment" />
@@ -266,7 +266,6 @@ export const CarouselFieldsSettings = () => {
                       ))}
                     </SelectContent>
                   </Select>
-
                   <FormDescription>Align images if multiple</FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -279,14 +278,14 @@ export const CarouselFieldsSettings = () => {
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                   <div className="space-y-0.5">
-                    <FormLabel>Loop carousel</FormLabel>
+                    <FormLabel htmlFor="loop">Loop carousel</FormLabel>
                     <FormDescription>
                       Whether the carousel should loop back to the beginning after reaching the last
                       item
                     </FormDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch checked={field.value} onCheckedChange={field.onChange} id="loop" />
                   </FormControl>
                 </FormItem>
               )}
@@ -298,13 +297,13 @@ export const CarouselFieldsSettings = () => {
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                   <div className="space-y-0.5">
-                    <FormLabel>Autoplay</FormLabel>
+                    <FormLabel htmlFor="autoplay">Autoplay</FormLabel>
                     <FormDescription>
                       Whether the carousel should automatically move to the next item
                     </FormDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch checked={field.value} onCheckedChange={field.onChange} id="autoplay" />
                   </FormControl>
                 </FormItem>
               )}

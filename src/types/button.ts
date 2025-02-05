@@ -10,7 +10,7 @@ export type ButtonProps = {
 
 export type ButtonSettingsActions = {
   setLabel: (title: string) => void;
-  setLink: (link: string) => void;
+  setLink: (link?: string) => void;
   setLabelColor: (color: string) => void;
   setBGColor: (bgColor: string) => void;
   setPadding: (padding: number) => void;

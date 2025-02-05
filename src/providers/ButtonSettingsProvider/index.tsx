@@ -25,37 +25,37 @@ const ButtonSettingsContext = createContext<ButtonSettingsContextType>({
 export const ButtonSettingsProvider: ReactFCWithChildren = ({ children }) => {
   const [state, dispatch] = useReducer(buttonSettingsReducer, buttonInitialState);
 
-  const setLabel = useCallback((label: string) => {
+  const setLabel: ButtonSettingsActions["setLabel"] = useCallback((label) => {
     dispatch({ type: ButtonReducerActionEnum.SET_LABEL, payload: { label } });
 
     toast(`Set button label to ${label}`);
   }, []);
 
-  const setLabelColor = useCallback((labelColor: string) => {
+  const setLabelColor: ButtonSettingsActions["setLabelColor"] = useCallback((labelColor) => {
     dispatch({ type: ButtonReducerActionEnum.SET_LABEL_COLOR, payload: { labelColor } });
 
     toast(`Set button label color to ${labelColor}`);
   }, []);
 
-  const setLink = useCallback((link: string) => {
+  const setLink: ButtonSettingsActions["setLink"] = useCallback((link) => {
     dispatch({ type: ButtonReducerActionEnum.SET_LINK, payload: { link } });
 
     toast(`Set button link to ${link}`);
   }, []);
 
-  const setBGColor = useCallback((bgColor: string) => {
+  const setBGColor: ButtonSettingsActions["setBGColor"] = useCallback((bgColor) => {
     dispatch({ type: ButtonReducerActionEnum.SET_BG_COLOR, payload: { bgColor } });
 
     toast(`Set button background color to ${bgColor}`);
   }, []);
 
-  const setPadding = useCallback((padding: number) => {
+  const setPadding: ButtonSettingsActions["setPadding"] = useCallback((padding) => {
     dispatch({ type: ButtonReducerActionEnum.SET_PADDING, payload: { padding } });
 
     toast(`Set button padding to ${padding}px`);
   }, []);
 
-  const setBorderRadius = useCallback((borderRadius: number) => {
+  const setBorderRadius: ButtonSettingsActions["setBorderRadius"] = useCallback((borderRadius) => {
     dispatch({ type: ButtonReducerActionEnum.SET_BORDER_RADIUS, payload: { borderRadius } });
 
     toast(`Set button border radius to ${borderRadius}%`);
