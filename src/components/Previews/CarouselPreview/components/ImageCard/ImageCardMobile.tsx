@@ -29,7 +29,11 @@ export const ImageCardMobile = ({
       >
         <XIcon className="h-4 w-4" />
       </Button>
-      <span className="absolute top-0 left-1/2 -translate-x-1/2">{title}</span>
+      <span className="absolute top-0 left-1/2 -translate-x-1/2">
+        <a rel="noopener noreferrer" target="_blank" href={image.src}>
+          {title}
+        </a>
+      </span>
       <Button
         title="Edit image"
         type="button"

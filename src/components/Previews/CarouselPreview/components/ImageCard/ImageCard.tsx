@@ -35,7 +35,11 @@ export const ImageCard = ({
           isHovered ? "" : "hidden"
         }`}
       >
-        <div className="">{title}</div>
+        <div>
+          <a rel="noopener noreferrer" target="_blank" href={image.src}>
+            {title}
+          </a>
+        </div>
 
         <div className="flex gap-2">
           <Button title="Remove image" type="button" variant="destructive" onClick={removeImage}>

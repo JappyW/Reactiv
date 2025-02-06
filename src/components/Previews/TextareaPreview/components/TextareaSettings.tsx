@@ -168,7 +168,7 @@ export const TextareaSettings = () => {
               <Button type="submit" variant="destructive" onClick={resetFormFields}>
                 Reset
               </Button>
-              <Button variant="secondary" type="submit">
+              <Button type="submit">
                 Save
               </Button>
             </div>

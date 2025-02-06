@@ -1,20 +1,5 @@
 import { ButtonProps, ClassNameHelper } from "@/types";
 
-// const MobileButtonLabel = ({
-//   link,
-//   label,
-//   style,
-// }: Pick<ButtonProps, "link" | "label"> & { style: React.CSSProperties }) => {
-//   if (link) {
-//     return (
-//         {label}
-//       </a>
-//     );
-//   }
-
-//   return
-// };
-
 export const MobileButton = ({
   bgColor,
   label,
@@ -24,10 +9,15 @@ export const MobileButton = ({
   padding,
   className,
 }: ButtonProps & ClassNameHelper) => {
-  console.log(link);
-
   return (
-    <a rel="noopener noreferrer" target="_blank" style={{ color: labelColor }} href={link}>
+    <a
+      id="mobile-button"
+      className="mobile-button-link"
+      rel="noopener noreferrer"
+      target="_blank"
+      style={{ color: labelColor }}
+      href={link}
+    >
       <button
         aria-label={label}
         className={className}

@@ -130,7 +130,6 @@ export const CarouselImagesSettings = () => {
               />
               <DialogFooter>
                 <Button
-                  title="Save"
                   type="button"
                   variant="destructive"
                   className="w-24"
@@ -139,7 +138,6 @@ export const CarouselImagesSettings = () => {
                   Cancel
                 </Button>
                 <Button
-                  title="Save"
                   type="button"
                   className="w-24"
                   onClick={handleSubmitExistingImage}

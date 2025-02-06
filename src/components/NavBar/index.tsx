@@ -5,10 +5,10 @@ import { Link } from "react-router";
 
 export const NavBar = () => {
   return (
-    <nav className="flex flex-wrap items-center justify-between p-4 bg-primary-dark text-primary-content dark:bg-primary-dark dark:text-primary-content-dark shadow-md shadow-indigo-500/10">
+    <nav className="flex flex-wrap items-center justify-between p-4 bg-primary-dark text-primary-content dark:bg-primary-dark dark:text-primary-content-dark shadow-md shadow-primary/10">
       <div className="flex gap-2">
         <a href="https://www.reactivapp.com/" target="_blank" className="w-40">
-          <ReactivLogoSVG color="#0DD686" />
+          <ReactivLogoSVG color="hsl(var(--primary))" />
         </a>
       </div>
       <ul className="flex flex-wrap gap-4 items-center">

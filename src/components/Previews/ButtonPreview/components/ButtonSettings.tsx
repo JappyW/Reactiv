@@ -231,7 +231,7 @@ export const ButtonSettings = () => {
               <Button type="submit" variant="destructive" onClick={resetFormFields}>
                 Reset
               </Button>
-              <Button type="submit" variant="secondary">
+              <Button type="submit">
                 Save
               </Button>
             </div>

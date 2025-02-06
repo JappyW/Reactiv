@@ -313,7 +313,7 @@ export const CarouselFieldsSettings = () => {
               <Button variant="destructive" type="submit" onClick={resetFormFields}>
                 Reset
               </Button>
-              <Button variant="secondary" type="submit">
+              <Button type="submit">
                 Save
               </Button>
             </div>

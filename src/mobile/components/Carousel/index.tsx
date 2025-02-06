@@ -1,3 +1,4 @@
+import { AUTOPLAY_DELAY } from "@/constants";
 import { CarouselOrientationEnum } from "@/constants/enums";
 import { CarouselMode, CarouselProps } from "@/types";
 import {
@@ -7,7 +8,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@components/ShadCN";
-import { CarouselPlugin } from "@components/ShadCN/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import { useMemo } from "react";
 
 const calculateWithAndHeightClass = (mode: CarouselMode) => {
   switch (mode) {
@@ -22,18 +24,34 @@ const calculateWithAndHeightClass = (mode: CarouselMode) => {
   }
 };
 
-export const Carousel = ({
+export const MobileCarousel = ({
   images,
   mode,
   orientation,
   loop,
   alignment,
-  plugins,
   itemsPerPage = 1,
-}: Omit<CarouselProps, "autoplay"> & { plugins: CarouselPlugin }) => {
+  autoplay,
+}: CarouselProps) => {
+  const carouselPlugins = useMemo(() => {
+    let addedPlugins = [];
+
+    if (autoplay) {
+      addedPlugins.push(
+        Autoplay({
+          delay: AUTOPLAY_DELAY,
+          stopOnLastSnap: !loop,
+          stopOnMouseEnter: true,
+        })
+      );
+    }
+
+    return addedPlugins;
+  }, [autoplay]);
+
   return (
     <CarouselComponent
-      plugins={plugins}
+      plugins={[...carouselPlugins]}
       className="w-full"
       orientation={orientation}
       opts={{
@@ -42,11 +60,11 @@ export const Carousel = ({
       }}
     >
       <CarouselContent
-        className={`${
-          orientation === CarouselOrientationEnum.HORIZONTAL
-            ? "h-fit"
-            : calculateWithAndHeightClass(mode)
-        } w-fit`}
+      className={`${
+        orientation === CarouselOrientationEnum.HORIZONTAL
+          ? "h-fit"
+          : calculateWithAndHeightClass(mode)
+      } w-fit`}
       >
         {images.map((image) => (
           <CarouselItem key={image.id} className={`flex justify-center basis-1/${itemsPerPage}`}>

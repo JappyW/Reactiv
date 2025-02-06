@@ -7,7 +7,7 @@ export const MobileTextarea = ({
   titleColor,
 }: TextareaProps) => {
   return (
-    <div className="flex flex-col gap-4 w-full overflow-y-auto">
+    <div className="flex flex-col gap-4 w-full overflow-y-auto p-1">
       <label htmlFor="textarea" className="text-center" style={{ color: titleColor }}>
         {title}
       </label>
@@ -28,8 +28,7 @@ export const MobileTextarea = ({
       <textarea
         id="textarea"
         name="textarea"
-        style={{ color: descriptionColor }}
-        className={`placeholder:text-[${descriptionColor}]`}
+        className={`bg-card min-h-40 rounded-sm p-1`}
         placeholder={description}
       />
     </div>

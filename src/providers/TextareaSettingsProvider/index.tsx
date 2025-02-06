@@ -48,7 +48,7 @@ export const TextareaSettingsProvider: ReactFCWithChildren = ({ children }) => {
         payload: { descriptionColor },
       });
 
-      toast(`Set textarea description background color to ${descriptionColor}`);
+      toast(`Set textarea description color to ${descriptionColor}`);
     },
     []
   );
