@@ -1307,6 +1307,10 @@ body {
   background-color: hsl(var(--primary));
 }
 
+.bg-primary-foreground {
+  background-color: hsl(var(--primary-foreground));
+}
+
 .bg-secondary {
   background-color: hsl(var(--secondary));
 }

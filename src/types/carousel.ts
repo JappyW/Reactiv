@@ -1,8 +1,9 @@
 import {
-    CarouselAlignmentEnum,
-    CarouselModeEnum,
-    CarouselOrientationEnum,
+  CarouselAlignmentEnum,
+  CarouselModeEnum,
+  CarouselOrientationEnum,
 } from "@/constants/enums";
+
 //Carousel Types
 export type CarouselProps = {
   images: CarouselImage[];
