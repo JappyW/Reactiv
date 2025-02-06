@@ -8,7 +8,7 @@ import TextareaPage from "@/pages/textarea";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { HashRouter, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
         <Suspense fallback={<div>Loading...</div>}>
-          <BrowserRouter>
+          <HashRouter>
             <Routes>
               <Route element={<DefaultLayout />}>
                 <Route element={<PageLayout />}>
@@ -28,7 +28,7 @@ function App() {
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
         </Suspense>
         <Toaster />
       </ThemeProvider>
