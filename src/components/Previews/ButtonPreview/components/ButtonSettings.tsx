@@ -142,6 +142,7 @@ export const ButtonSettings = () => {
                     <FormControl>
                       <Input
                         {...field}
+                        type="number"
                         value={field.value ?? ""}
                         placeholder="Percentage in numbers"
                         id="borderRadius"
@@ -164,6 +165,7 @@ export const ButtonSettings = () => {
                     <FormControl>
                       <Input
                         {...field}
+                        type="number"
                         value={field.value ?? ""}
                         placeholder="Number of pixels"
                         id="padding"
@@ -231,9 +233,7 @@ export const ButtonSettings = () => {
               <Button type="submit" variant="destructive" onClick={resetFormFields}>
                 Reset
               </Button>
-              <Button type="submit">
-                Save
-              </Button>
+              <Button type="submit">Save</Button>
             </div>
           </form>
         </Form>
