@@ -22,3 +22,16 @@ export const MAX_TEXTAREA_DESCRIPTION_LENGTH = 200;
 
 export const INVALID_COLOR_MESSAGE = "Invalid color code";
 export const INVALID_URL_MESSAGE = "Invalid URL";
+
+export enum LOCAL_STORAGE_KEYS {
+  VITE_THEME_UI = "vite-theme-ui",
+  TEXTAREA_SETTINGS = "textarea-settings",
+  BUTTON_SETTINGS = "button-settings",
+  CAROUSEL_SETTINGS = "carousel-settings",
+}
+
+export const listOfObjectsInLocalStorage = [
+  LOCAL_STORAGE_KEYS.BUTTON_SETTINGS,
+  LOCAL_STORAGE_KEYS.TEXTAREA_SETTINGS,
+  LOCAL_STORAGE_KEYS.CAROUSEL_SETTINGS,
+];

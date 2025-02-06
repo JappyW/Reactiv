@@ -11,7 +11,7 @@ export type TextareaReducerActionTypes =
     };
 
 export const textareaInitialState: TextareaProps = {
-  title: "Hello there Text Area 👋",
+  title: "Hello there Text Area",
   titleColor: "#ffffff",
   description: "Example description",
   descriptionColor: "#ffffff",

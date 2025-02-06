@@ -1,9 +1,14 @@
-import { NO_CALLBACK } from "@/constants";
+import { LOCAL_STORAGE_KEYS, NO_CALLBACK } from "@/constants";
 import { TextareaReducerActionEnum } from "@/constants/enums";
+import { usePersistReducer } from "@/hooks/usePersistReducer";
 import { ReactFCWithChildren, TextareaProps, TextareaSettingsActions } from "@/types";
-import { createContext, useCallback, useContext, useReducer } from "react";
+import { createContext, useCallback, useContext } from "react";
 import { toast } from "sonner";
-import { textareaInitialState, textareaSettingsReducer } from "./reducer";
+import {
+  textareaInitialState,
+  TextareaReducerActionTypes,
+  textareaSettingsReducer,
+} from "./reducer";
 
 type TextareaSettingsContextType = {
   state: TextareaProps;
@@ -21,7 +26,11 @@ const TextareaSettingsContext = createContext<TextareaSettingsContextType>({
 });
 
 export const TextareaSettingsProvider: ReactFCWithChildren = ({ children }) => {
-  const [state, dispatch] = useReducer(textareaSettingsReducer, textareaInitialState);
+  const [state, dispatch] = usePersistReducer<TextareaProps, TextareaReducerActionTypes>(
+    textareaSettingsReducer,
+    textareaInitialState,
+    LOCAL_STORAGE_KEYS.TEXTAREA_SETTINGS
+  );
 
   const setTitle: TextareaSettingsActions["setTitle"] = useCallback((title) => {
     dispatch({ type: TextareaReducerActionEnum.SET_TITLE, payload: { title } });

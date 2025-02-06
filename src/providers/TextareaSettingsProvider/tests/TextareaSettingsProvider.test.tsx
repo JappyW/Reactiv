@@ -1,3 +1,4 @@
+import { textareaInitialState } from "@/providers/TextareaSettingsProvider/reducer";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { toast } from "sonner";
 import { describe, expect, it, vi } from "vitest";
@@ -34,10 +35,12 @@ describe("TextareaSettingsProvider", () => {
       </TextareaSettingsProvider>
     );
 
-    expect(screen.getByTestId("title").textContent).toBe("Hello there Text Area 👋");
-    expect(screen.getByTestId("titleColor").textContent).toBe("#ffffff");
-    expect(screen.getByTestId("description").textContent).toBe("Example description");
-    expect(screen.getByTestId("descriptionColor").textContent).toBe("#ffffff");
+    expect(screen.getByTestId("title").textContent).toBe(textareaInitialState.title);
+    expect(screen.getByTestId("titleColor").textContent).toBe(textareaInitialState.titleColor);
+    expect(screen.getByTestId("description").textContent).toBe(textareaInitialState.description);
+    expect(screen.getByTestId("descriptionColor").textContent).toBe(
+      textareaInitialState.descriptionColor
+    );
   });
 
   it("updates title and shows toast", () => {

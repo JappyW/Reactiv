@@ -1,16 +1,14 @@
-import { NO_CALLBACK } from "@/constants";
+import { LOCAL_STORAGE_KEYS, NO_CALLBACK } from "@/constants";
 import { CarouselReducerActionEnum } from "@/constants/enums";
+import { usePersistReducer } from "@/hooks/usePersistReducer";
 import { pluralize } from "@/lib/utils";
 import {
   carouselInitialState,
+  CarouselReducerActionTypes,
   carouselSettingsReducer,
 } from "@/providers/CarouselSettingsProvider/reducer";
-import {
-  CarouselProps,
-  CarouselSettingsActions,
-  ReactFCWithChildren
-} from "@/types";
-import { createContext, useCallback, useContext, useReducer } from "react";
+import { CarouselProps, CarouselSettingsActions, ReactFCWithChildren } from "@/types";
+import { createContext, useCallback, useContext } from "react";
 import { toast } from "sonner";
 
 type CarouselSettingsContextType = {
@@ -34,7 +32,11 @@ const CarouselSettingsContext = createContext<CarouselSettingsContextType>({
 });
 
 export const CarouselSettingsProvider: ReactFCWithChildren = ({ children }) => {
-  const [state, dispatch] = useReducer(carouselSettingsReducer, carouselInitialState);
+  const [state, dispatch] = usePersistReducer<CarouselProps, CarouselReducerActionTypes>(
+    carouselSettingsReducer,
+    carouselInitialState,
+    LOCAL_STORAGE_KEYS.CAROUSEL_SETTINGS
+  );
 
   const addImage: CarouselSettingsActions["addImage"] = useCallback((image) => {
     dispatch({ type: CarouselReducerActionEnum.ADD_IMAGE, payload: { image } });

@@ -16,7 +16,7 @@ export const MobileButton = ({
       rel="noopener noreferrer"
       target="_blank"
       style={{ color: labelColor }}
-      href={link}
+      href={link === "" ? undefined : link}
     >
       <button
         aria-label={label}

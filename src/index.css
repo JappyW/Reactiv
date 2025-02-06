@@ -52,6 +52,11 @@ h1 {
   line-height: 1.1;
 }
 
+button:active {
+  scale: 0.98;
+  transform: ease-in-out 150ms scale;
+}
+
 @layer base {
   :root {
     --gradient: linear-gradient(to top left, #0f0c29, #302b63, #24243e);

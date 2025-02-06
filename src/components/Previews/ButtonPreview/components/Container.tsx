@@ -17,7 +17,7 @@ export const ButtonContainer = () => {
       <PhoneScreen>
         <MobileButton
           {...rest}
-          className="max-w-72"
+          className="max-w-72 hover:scale-105 active:scale-95 shadow-md shadow-primary/10 transition-transform duration-150"
           borderRadius={borderRadius}
           padding={padding}
           bgColor={bgColor}

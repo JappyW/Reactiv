@@ -14,7 +14,7 @@ import { Toaster } from "sonner";
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="dark">
         <Suspense fallback={<div>Loading...</div>}>
           <BrowserRouter>
             <Routes>

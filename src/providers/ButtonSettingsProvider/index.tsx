@@ -1,9 +1,10 @@
-import { NO_CALLBACK } from "@/constants";
+import { LOCAL_STORAGE_KEYS, NO_CALLBACK } from "@/constants";
 import { ButtonReducerActionEnum } from "@/constants/enums";
+import { usePersistReducer } from "@/hooks/usePersistReducer";
 import { ButtonProps, ButtonSettingsActions, ReactFCWithChildren } from "@/types";
-import { createContext, useCallback, useContext, useReducer } from "react";
+import { createContext, useCallback, useContext } from "react";
 import { toast } from "sonner";
-import { buttonInitialState, buttonSettingsReducer } from "./reducer";
+import { buttonInitialState, ButtonReducerActionTypes, buttonSettingsReducer } from "./reducer";
 
 type ButtonSettingsContextType = {
   state: ButtonProps;
@@ -23,7 +24,11 @@ const ButtonSettingsContext = createContext<ButtonSettingsContextType>({
 });
 
 export const ButtonSettingsProvider: ReactFCWithChildren = ({ children }) => {
-  const [state, dispatch] = useReducer(buttonSettingsReducer, buttonInitialState);
+  const [state, dispatch] = usePersistReducer<ButtonProps, ButtonReducerActionTypes>(
+    buttonSettingsReducer,
+    buttonInitialState,
+    LOCAL_STORAGE_KEYS.BUTTON_SETTINGS
+  );
 
   const setLabel: ButtonSettingsActions["setLabel"] = useCallback((label) => {
     dispatch({ type: ButtonReducerActionEnum.SET_LABEL, payload: { label } });
@@ -40,7 +45,7 @@ export const ButtonSettingsProvider: ReactFCWithChildren = ({ children }) => {
   const setLink: ButtonSettingsActions["setLink"] = useCallback((link) => {
     dispatch({ type: ButtonReducerActionEnum.SET_LINK, payload: { link } });
 
-    toast(`Set button link to ${link}`);
+    toast(!link ? "Removed button link" : `Set button link to ${link}`);
   }, []);
 
   const setBGColor: ButtonSettingsActions["setBGColor"] = useCallback((bgColor) => {

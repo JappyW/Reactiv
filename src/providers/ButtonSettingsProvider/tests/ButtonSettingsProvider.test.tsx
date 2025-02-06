@@ -21,6 +21,7 @@ const TestComponent = () => {
       <span data-testid="button-link">{link}</span>
       <span data-testid="button-padding">{padding}</span>
       <button onClick={() => setLink("https://google.com")}>Change Link</button>
+      <button onClick={() => setLink()}>Remove Link</button>
       <button onClick={() => setLabel("New Label")}>Change Label</button>
       <button onClick={() => setPadding(10)}>Change Padding</button>
       <button onClick={() => setBGColor("#ffffff")}>Change BG Color</button>
@@ -109,6 +110,19 @@ describe("ButtonSettingsProvider", () => {
     fireEvent.click(changeLinkBtn);
     expect(screen.getByTestId("button-link").textContent).toBe("https://google.com");
     expect(toast).toHaveBeenCalledWith("Set button link to https://google.com");
+  });
+
+  it("allows removing button link", () => {
+    render(
+      <ButtonSettingsProvider>
+        <TestComponent />
+      </ButtonSettingsProvider>
+    );
+
+    const removeLinkBtn = screen.getByText("Remove Link");
+    fireEvent.click(removeLinkBtn);
+    expect(screen.getByTestId("button-link").textContent).toBe("");
+    expect(toast).toHaveBeenCalledWith("Removed button link");
   });
 
   it("allows changing button padding", () => {

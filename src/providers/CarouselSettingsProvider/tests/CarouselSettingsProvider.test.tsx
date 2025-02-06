@@ -1,3 +1,4 @@
+import { carouselInitialState } from "@/providers/CarouselSettingsProvider/reducer";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { toast } from "sonner";
 import { describe, expect, it, vi } from "vitest";
@@ -6,6 +7,11 @@ import { CarouselSettingsProvider, useCarouselSettings } from "../index";
 vi.mock("sonner", () => ({
   toast: vi.fn(),
 }));
+
+function expectArrayEquivalence<T>(actual: T[], expected: T[]) {
+  expect(actual).toEqual(expect.arrayContaining(expected));
+  expect(expected).toEqual(expect.arrayContaining(actual));
+}
 
 const TestComponent = () => {
   const {
@@ -31,13 +37,9 @@ const TestComponent = () => {
       <div data-testid="images">{JSON.stringify(images)}</div>
       <div data-testid="orientation">{orientation}</div>
 
-      <button onClick={() => addImage({ src: "test.png", id: "123asg_asd-123_1251" })}>
-        Add Image
-      </button>
-      <button onClick={() => editImage({ src: "test2.png", id: "123asg_asd-123_1251" })}>
-        Edit Image
-      </button>
-      <button onClick={() => removeImage("image1")}>Remove Image</button>
+      <button onClick={() => addImage({ src: "test.png", id: "-10" })}>Add Image</button>
+      <button onClick={() => editImage({ src: "test2.png", id: "-10" })}>Edit Image</button>
+      <button onClick={() => removeImage("-10")}>Remove Image</button>
       <button onClick={() => setAlignment("center")}>Set Alignment</button>
       <button onClick={() => setAutoplay(true)}>Set Autoplay</button>
       <button onClick={() => setItemsPerPage(3)}>Set Items Per Page</button>
@@ -55,13 +57,20 @@ describe("CarouselSettingsProvider", () => {
       </CarouselSettingsProvider>
     );
 
-    expect(screen.getByTestId("alignment").textContent).toBe("start");
-    expect(screen.getByTestId("autoplay").textContent).toBe("enabled");
-    expect(screen.getByTestId("itemsPerPage").textContent).toBe("1");
-    expect(screen.getByTestId("loop").textContent).toBe("enabled");
-    expect(screen.getByTestId("mode").textContent).toBe("portrait");
-    expect(screen.getByTestId("images").textContent).toBe(
-      '[{"id":"1","src":"https://images.pexels.com/photos/30375942/pexels-photo-30375942/free-photo-of-vintage-street-lamp-against-modern-architecture.jpeg"},{"id":"2","src":"https://images.pexels.com/photos/30443465/pexels-photo-30443465/free-photo-of-colorful-traditional-water-seller-in-moroccan-souk.jpeg"},{"id":"3","src":"https://images.pexels.com/photos/30472132/pexels-photo-30472132/free-photo-of-couple-in-traditional-kimono-at-fushimi-inari.jpeg"},{"id":"4","src":"https://images.pexels.com/photos/29861006/pexels-photo-29861006/free-photo-of-majestic-mountain-peaks-shrouded-in-clouds.jpeg"},{"id":"5","src":"https://images.pexels.com/photos/30417370/pexels-photo-30417370/free-photo-of-snowy-mountains-under-clear-blue-sky.jpeg"},{"id":"6","src":"https://images.pexels.com/photos/30462129/pexels-photo-30462129/free-photo-of-majestic-himalayan-mountain-landscape.jpeg"},{"id":"7","src":"https://images.pexels.com/photos/30326244/pexels-photo-30326244/free-photo-of-classic-car-driving-through-snowy-mountain-landscape.jpeg"},{"id":"8","src":"https://images.pexels.com/photos/29587987/pexels-photo-29587987/free-photo-of-vibrant-nightlife-in-tokyo-s-shinjuku-district.jpeg"},{"id":"9","src":"https://images.pexels.com/photos/30238187/pexels-photo-30238187/free-photo-of-stunning-image-of-the-tarantula-nebula.jpeg"}]'
+    expect(screen.getByTestId("alignment").textContent).toBe(carouselInitialState.alignment);
+    expect(screen.getByTestId("autoplay").textContent).toBe(
+      carouselInitialState.autoplay ? "enabled" : "disabled"
+    );
+    expect(screen.getByTestId("itemsPerPage").textContent).toBe(
+      String(carouselInitialState.itemsPerPage)
+    );
+    expect(screen.getByTestId("loop").textContent).toBe(
+      carouselInitialState.loop ? "enabled" : "disabled"
+    );
+    expect(screen.getByTestId("mode").textContent).toBe(carouselInitialState.mode);
+    expectArrayEquivalence(
+      JSON.parse(screen.getByTestId("images").textContent!),
+      carouselInitialState.images
     );
     expect(screen.getByTestId("orientation").textContent).toBe("horizontal");
   });
@@ -135,9 +144,21 @@ describe("CarouselSettingsProvider", () => {
     const button = screen.getByText("Add Image");
     fireEvent.click(button);
     expect(screen.getByTestId("images").textContent).toBe(
-      `[{"id":"1","src":"https://images.pexels.com/photos/30375942/pexels-photo-30375942/free-photo-of-vintage-street-lamp-against-modern-architecture.jpeg"},{"id":"2","src":"https://images.pexels.com/photos/30443465/pexels-photo-30443465/free-photo-of-colorful-traditional-water-seller-in-moroccan-souk.jpeg"},{"id":"3","src":"https://images.pexels.com/photos/30472132/pexels-photo-30472132/free-photo-of-couple-in-traditional-kimono-at-fushimi-inari.jpeg"},{"id":"4","src":"https://images.pexels.com/photos/29861006/pexels-photo-29861006/free-photo-of-majestic-mountain-peaks-shrouded-in-clouds.jpeg"},{"id":"5","src":"https://images.pexels.com/photos/30417370/pexels-photo-30417370/free-photo-of-snowy-mountains-under-clear-blue-sky.jpeg"},{"id":"6","src":"https://images.pexels.com/photos/30462129/pexels-photo-30462129/free-photo-of-majestic-himalayan-mountain-landscape.jpeg"},{"id":"7","src":"https://images.pexels.com/photos/30326244/pexels-photo-30326244/free-photo-of-classic-car-driving-through-snowy-mountain-landscape.jpeg"},{"id":"8","src":"https://images.pexels.com/photos/29587987/pexels-photo-29587987/free-photo-of-vibrant-nightlife-in-tokyo-s-shinjuku-district.jpeg"},{"id":"9","src":"https://images.pexels.com/photos/30238187/pexels-photo-30238187/free-photo-of-stunning-image-of-the-tarantula-nebula.jpeg"},{"src":"test.png","id":"123asg_asd-123_1251"}]`
+      `[{"id":"1","src":"https://images.pexels.com/photos/30375942/pexels-photo-30375942/free-photo-of-vintage-street-lamp-against-modern-architecture.jpeg"},{"id":"2","src":"https://images.pexels.com/photos/30443465/pexels-photo-30443465/free-photo-of-colorful-traditional-water-seller-in-moroccan-souk.jpeg"},{"id":"3","src":"https://images.pexels.com/photos/30472132/pexels-photo-30472132/free-photo-of-couple-in-traditional-kimono-at-fushimi-inari.jpeg"},{"id":"4","src":"https://images.pexels.com/photos/29861006/pexels-photo-29861006/free-photo-of-majestic-mountain-peaks-shrouded-in-clouds.jpeg"},{"id":"5","src":"https://images.pexels.com/photos/30417370/pexels-photo-30417370/free-photo-of-snowy-mountains-under-clear-blue-sky.jpeg"},{"id":"6","src":"https://images.pexels.com/photos/30462129/pexels-photo-30462129/free-photo-of-majestic-himalayan-mountain-landscape.jpeg"},{"id":"7","src":"https://images.pexels.com/photos/30326244/pexels-photo-30326244/free-photo-of-classic-car-driving-through-snowy-mountain-landscape.jpeg"},{"id":"8","src":"https://images.pexels.com/photos/29587987/pexels-photo-29587987/free-photo-of-vibrant-nightlife-in-tokyo-s-shinjuku-district.jpeg"},{"id":"9","src":"https://images.pexels.com/photos/30238187/pexels-photo-30238187/free-photo-of-stunning-image-of-the-tarantula-nebula.jpeg"},{"src":"test.png","id":"-10"}]`
     );
     expect(toast).toHaveBeenCalledWith("Added an image");
+  });
+
+  it("removes an image", () => {
+    render(
+      <CarouselSettingsProvider>
+        <TestComponent />
+      </CarouselSettingsProvider>
+    );
+    const button = screen.getByText("Remove Image");
+    fireEvent.click(button);
+    expect(screen.getByTestId("images").textContent).not.toContain('{"id":"-10"}');
+    expect(toast).toHaveBeenCalledWith("Removed the image");
   });
 
   it("edits an image", () => {
@@ -152,17 +173,5 @@ describe("CarouselSettingsProvider", () => {
       '[{"id":"1","src":"https://images.pexels.com/photos/30375942/pexels-photo-30375942/free-photo-of-vintage-street-lamp-against-modern-architecture.jpeg"},{"id":"2","src":"https://images.pexels.com/photos/30443465/pexels-photo-30443465/free-photo-of-colorful-traditional-water-seller-in-moroccan-souk.jpeg"},{"id":"3","src":"https://images.pexels.com/photos/30472132/pexels-photo-30472132/free-photo-of-couple-in-traditional-kimono-at-fushimi-inari.jpeg"},{"id":"4","src":"https://images.pexels.com/photos/29861006/pexels-photo-29861006/free-photo-of-majestic-mountain-peaks-shrouded-in-clouds.jpeg"},{"id":"5","src":"https://images.pexels.com/photos/30417370/pexels-photo-30417370/free-photo-of-snowy-mountains-under-clear-blue-sky.jpeg"},{"id":"6","src":"https://images.pexels.com/photos/30462129/pexels-photo-30462129/free-photo-of-majestic-himalayan-mountain-landscape.jpeg"},{"id":"7","src":"https://images.pexels.com/photos/30326244/pexels-photo-30326244/free-photo-of-classic-car-driving-through-snowy-mountain-landscape.jpeg"},{"id":"8","src":"https://images.pexels.com/photos/29587987/pexels-photo-29587987/free-photo-of-vibrant-nightlife-in-tokyo-s-shinjuku-district.jpeg"},{"id":"9","src":"https://images.pexels.com/photos/30238187/pexels-photo-30238187/free-photo-of-stunning-image-of-the-tarantula-nebula.jpeg"}]'
     );
     expect(toast).toHaveBeenCalledWith("Edited the image");
-  });
-
-  it("removes an image", () => {
-    render(
-      <CarouselSettingsProvider>
-        <TestComponent />
-      </CarouselSettingsProvider>
-    );
-    const button = screen.getByText("Remove Image");
-    fireEvent.click(button);
-    expect(screen.getByTestId("images").textContent).not.toContain('{"id":"image1"}');
-    expect(toast).toHaveBeenCalledWith("Removed the image");
   });
 });

@@ -28,7 +28,7 @@ export const buttonFormSchema = z.object({
     .string()
     .min(MIN_BUTTON_LABEL, `Label must ${MIN_BUTTON_LABEL} characters or more`)
     .max(MAX_BUTTON_LABEL, `Label must ${MAX_BUTTON_LABEL} characters or less`),
-  link: z.string().url(INVALID_URL_MESSAGE).optional(),
+  link: z.string().url(INVALID_URL_MESSAGE).optional().or(z.literal("")),
   bgColor: z.string().regex(HEX_COLOR_REGEX, INVALID_COLOR_MESSAGE),
   labelColor: z.string().regex(HEX_COLOR_REGEX, INVALID_COLOR_MESSAGE),
   borderRadius: z.coerce
