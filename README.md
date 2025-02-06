@@ -4,8 +4,17 @@
 
 ```js
 git clone https://github.com/JappyW/Reactiv.git
+```
+
+```
 cd Reactiv
+```
+
+```
 npm install
+```
+
+```
 npm run dev
 ```
 
