@@ -17,7 +17,7 @@ npm run test
 
 ### This App has been deployed to fly.io
 
-[DEMO](https://reactiv.fly.dev/)
+[DEMO](https://reactiv.fly.dev)
 
 ### Tech stack
 
